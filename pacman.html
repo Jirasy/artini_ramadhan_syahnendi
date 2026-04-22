@@ -1,13 +1,74 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport", content="width=device-width, initial-scale=1.0">
-        <title>Pac-Man</title>
-        <link rel="stylesheet" href="pacman.css">
-        <script src="pacman.js"></script>
-    </head>
-    <body>
-        <canvas id="board"></canvas>
-    </body>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#060818">
+    <title>Pac-Man</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="pacman.css">
+</head>
+<body>
+    <div id="game-wrapper">
+
+        <!-- HUD -->
+        <div id="hud">
+            <div class="hud-block">
+                <span class="hud-label">SCORE</span>
+                <span id="score-value">0</span>
+            </div>
+            <div class="hud-block" id="lives-block">
+                <span class="hud-label">LIVES</span>
+                <div id="lives-icons"></div>
+            </div>
+            <div class="hud-block">
+                <span class="hud-label">LEVEL</span>
+                <span id="level-value">1</span>
+            </div>
+        </div>
+
+        <!-- Canvas -->
+        <div id="canvas-container">
+            <canvas id="board"></canvas>
+
+            <!-- Overlay: Game Over / Win / Start -->
+            <div id="overlay" class="hidden">
+                <div id="overlay-box">
+                    <div id="overlay-title">GAME OVER</div>
+                    <div id="overlay-score"></div>
+                    <button id="restart-btn" onclick="restartGame()">▶ PLAY AGAIN</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- D-Pad Touch Controls -->
+        <div id="controls">
+            <div id="dpad">
+                <div class="dpad-row">
+                    <div class="dpad-spacer"></div>
+                    <button class="dpad-btn" id="btn-up" aria-label="Up">▲</button>
+                    <div class="dpad-spacer"></div>
+                </div>
+                <div class="dpad-row">
+                    <button class="dpad-btn" id="btn-left" aria-label="Left">◀</button>
+                    <div class="dpad-center"></div>
+                    <button class="dpad-btn" id="btn-right" aria-label="Right">▶</button>
+                </div>
+                <div class="dpad-row">
+                    <div class="dpad-spacer"></div>
+                    <button class="dpad-btn" id="btn-down" aria-label="Down">▼</button>
+                    <div class="dpad-spacer"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="sprites_pacman.js"></script>
+    <script src="controls_pacman.js"></script>
+    <script src="pacman.js"></script>
+</body>
 </html>
