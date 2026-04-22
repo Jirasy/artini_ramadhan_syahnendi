@@ -1,122 +1,171 @@
-        // --- DATA KATA-KATA ---
-        const words = {
-            easy: [
-                "rumah", "meja", "kursi", "makan", "minum", "tidur", "buku", "pena", 
-                "kaki", "tangan", "kucing", "anjing", "air", "api", "emas", "pasar",
-                "besar", "kecil", "cepat", "lambat", "hijau", "merah", "biru"
-            ],
-            medium: [
-                "sekolah", "belajar", "komputer", "kamera", "telepon", "gambar", 
-                "musik", "politik", "budaya", "internet", "layar", "proses",
-                "kertas", "pensil", "barang", "ruangan", "kepala", "pintu", "jendela"
-            ],
-            hard: [
-                "universitas", "lingkungan", "pendidikan", "pengalaman", "pertahanan",
-                "keberhasilan", "keselamatan", "kebersihan", "persahabatan", "kepadatan",
-                "perindustrian", "pertanian", "keuangan", "kesejahteraan", "kemiskinan"
-            ]
-        };
+// ===== DATA KATA =====
+const words = {
+    easy: [
+        "rumah", "meja", "kursi", "makan", "minum", "tidur", "buku", "pena",
+        "kaki", "tangan", "kucing", "anjing", "air", "api", "emas", "pasar",
+        "besar", "kecil", "cepat", "lambat", "hijau", "merah", "biru", "pohon",
+        "bunga", "sungai", "gunung", "langit", "tanah", "buah", "daun", "batu",
+        "jalan", "pintu", "malam", "pagi", "siang", "sore", "gelap", "terang"
+    ],
+    medium: [
+        "sekolah", "belajar", "komputer", "kamera", "telepon", "gambar",
+        "musik", "politik", "budaya", "internet", "layar", "proses",
+        "kertas", "pensil", "barang", "ruangan", "kepala", "pintu", "jendela",
+        "halaman", "pelajaran", "makanan", "minuman", "kendaraan", "pekerjaan",
+        "perjalanan", "perasaan", "keluarga", "teman", "sahabat", "negara"
+    ],
+    hard: [
+        "universitas", "lingkungan", "pendidikan", "pengalaman", "pertahanan",
+        "keberhasilan", "keselamatan", "kebersihan", "persahabatan", "kepadatan",
+        "perindustrian", "pertanian", "keuangan", "kesejahteraan", "kemiskinan",
+        "kependudukan", "pembangunan", "pengetahuan", "kewarganegaraan",
+        "perekonomian", "penghargaan", "ketidakpastian", "pemimpin", "kebijakan"
+    ]
+};
 
-        // --- VARIABEL GLOBAL ---
-        let time = 60;
-        let score = 0;
-        let isPlaying;
-        let currentWordList = [];
-        let timerInterval;
+// ===== VARIABEL GLOBAL =====
+let time = 60;
+let score = 0;
+let streak = 0;
+let maxTime = 60;
+let currentWordList = [];
+let timerInterval = null;
 
-        // --- ELEMEN DOM ---
-        const wordInput = document.querySelector("#word-input");
-        const currentWord = document.querySelector("#current-word");
-        const scoreDisplay = document.querySelector("#score");
-        const timeDisplay = document.querySelector("#time");
-        const message = document.querySelector("#message");
-        const seconds = document.querySelector("#seconds");
-        
-        const menuScreen = document.getElementById("menu");
-        const gameScreen = document.getElementById("game");
-        const gameOverScreen = document.getElementById("game-over");
-        const finalScore = document.getElementById("final-score");
+// ===== ELEMEN DOM =====
+const wordInput     = document.getElementById("word-input");
+const currentWordEl = document.getElementById("current-word");
+const scoreEl       = document.getElementById("score");
+const timeEl        = document.getElementById("time");
+const streakEl      = document.getElementById("streak");
+const messageEl     = document.getElementById("message");
+const timerBar      = document.getElementById("timer-bar");
+const finalScoreEl  = document.getElementById("final-score");
+const resultDetailEl= document.getElementById("result-detail");
 
-        // --- FUNGSI UTAMA ---
+// ===== FUNGSI TAMPILAN LAYAR =====
+function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(function(s) {
+        s.classList.remove("active");
+    });
+    document.getElementById(id).classList.add("active");
+}
 
-        // 1. Memulai Game
-        function startGame(level) {
-            // Atur level
-            if(level === "easy") currentWordList = words.easy;
-            else if(level === "medium") currentWordList = words.medium;
-            else currentWordList = words.hard;
+// ===== MULAI GAME =====
+function startGame(level) {
+    currentWordList = words[level];
 
-            // Reset variabel
-            score = 0;
-            time = 60; // Waktu 60 detik
-            isPlaying = true;
-            scoreDisplay.innerHTML = score;
-            timeDisplay.innerHTML = time;
-            wordInput.value = "";
+    // Waktu disesuaikan per level
+    if (level === "easy")        maxTime = 60;
+    else if (level === "medium") maxTime = 75;
+    else                         maxTime = 90;
 
-            // Tampilkan layar game
-            menuScreen.classList.add("hidden");
-            gameOverScreen.classList.add("hidden");
-            gameScreen.classList.remove("hidden");
+    // Reset state
+    score   = 0;
+    streak  = 0;
+    time    = maxTime;
 
-            // Mulai fungsi
-            showNewWord();
-            
-            // Mulai Timer
-            clearInterval(timerInterval);
-            timerInterval = setInterval(countdown, 1000);
+    // Reset tampilan
+    scoreEl.textContent  = score;
+    timeEl.textContent   = time;
+    streakEl.textContent = streak;
+    wordInput.value      = "";
+    wordInput.className  = "";
+    messageEl.textContent = "";
 
-            // Fokus ke input agar langsung bisa mengetik
-            setTimeout(() => wordInput.focus(), 100);
-        }
+    // Reset timer bar
+    timerBar.style.width      = "100%";
+    timerBar.style.background = "#639922";
 
-        // 2. Menampilkan Kata Baru
-        function showNewWord() {
-            const randIndex = Math.floor(Math.random() * currentWordList.length);
-            currentWord.innerHTML = currentWordList[randIndex];
-        }
+    // Pindah ke layar game
+    showScreen("game");
+    showNewWord();
 
-        // 3. Mengecek Input
-        wordInput.addEventListener("input", () => {
-            const typedWord = wordInput.value;
-            const targetWord = currentWord.innerHTML;
+    // Mulai timer
+    clearInterval(timerInterval);
+    timerInterval = setInterval(countdown, 1000);
 
-            if (typedWord === targetWord) {
-                message.innerHTML = "Benar!";
-                score++;
-                scoreDisplay.innerHTML = score;
-                wordInput.value = "";
-                showNewWord();
-            } else {
-                // Optional: Beri tanda merah jika salah (bisa dikembangkan)
-                message.innerHTML = "";
-            }
-        });
+    // Fokus input
+    setTimeout(function() { wordInput.focus(); }, 200);
+}
 
-        // 4. Hitung Mundur (Timer)
-        function countdown() {
-            if (time > 0) {
-                time--;
-            } else if (time === 0) {
-                isPlaying = false;
-            }
-            timeDisplay.innerHTML = time;
+// ===== TAMPILKAN KATA BARU =====
+function showNewWord() {
+    var idx = Math.floor(Math.random() * currentWordList.length);
+    currentWordEl.textContent = currentWordList[idx];
+}
 
-            if (!isPlaying) {
-                endGame();
-            }
-        }
+// ===== CEK INPUT USER =====
+wordInput.addEventListener("input", function() {
+    var typed  = wordInput.value;
+    var target = currentWordEl.textContent;
 
-        // 5. Akhiri Game
-        function endGame() {
-            clearInterval(timerInterval);
-            gameScreen.classList.add("hidden");
-            gameOverScreen.classList.remove("hidden");
-            finalScore.innerHTML = score;
-        }
+    if (typed === target) {
+        // BENAR
+        score++;
+        streak++;
+        scoreEl.textContent  = score;
+        streakEl.textContent = streak;
 
-        // 6. Kembali ke Menu
-        function showMenu() {
-            gameOverScreen.classList.add("hidden");
-            menuScreen.classList.remove("hidden");
-        }
+        wordInput.value       = "";
+        wordInput.className   = "correct";
+        messageEl.textContent = "✓ Benar!";
+
+        setTimeout(function() {
+            wordInput.className   = "";
+            messageEl.textContent = "";
+        }, 400);
+
+        showNewWord();
+
+    } else if (target.startsWith(typed)) {
+        // SEDANG MENGETIK (awalan benar)
+        wordInput.className   = "";
+        messageEl.textContent = "";
+
+    } else {
+        // SALAH
+        streak = 0;
+        streakEl.textContent  = streak;
+        wordInput.className   = "wrong";
+        messageEl.textContent = "✗ Coba lagi...";
+    }
+});
+
+// ===== HITUNG MUNDUR =====
+function countdown() {
+    time--;
+    timeEl.textContent = time;
+
+    var pct = (time / maxTime) * 100;
+    timerBar.style.width = pct + "%";
+
+    // Warna timer bar berubah seiring waktu
+    if (pct < 25)       timerBar.style.background = "#E24B4A";
+    else if (pct < 50)  timerBar.style.background = "#BA7517";
+    else                timerBar.style.background = "#639922";
+
+    if (time <= 0) {
+        clearInterval(timerInterval);
+        endGame();
+    }
+}
+
+// ===== AKHIRI GAME =====
+function endGame() {
+    finalScoreEl.textContent = score;
+
+    var rating;
+    if      (score >= 25) rating = "Luar biasa! 🏆";
+    else if (score >= 15) rating = "Bagus sekali! 🎉";
+    else if (score >= 8)  rating = "Cukup baik! 👍";
+    else                  rating = "Terus berlatih! 💪";
+
+    resultDetailEl.textContent = rating + " Kamu mengetik " + score + " kata dengan benar.";
+    showScreen("game-over");
+}
+
+// ===== KEMBALI KE MENU =====
+function showMenu() {
+    clearInterval(timerInterval);
+    showScreen("menu");
+}
