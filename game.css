@@ -1,0 +1,91 @@
+/* ── Reset & Base ──────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Rajdhani", sans-serif;
+}
+
+.game-title {
+  font-family: "Orbitron", monospace;
+}
+
+/* ── Canvas ────────────────────────────────────────────────────────────────── */
+#gameCanvas {
+  display: block;
+  /* Pixel-perfect rendering */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ── Mobile control buttons ────────────────────────────────────────────────── */
+.control-btn {
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+  /* Bigger tap area on mobile */
+  cursor: pointer;
+}
+
+/* ── Overlay (pause / game-over / victory) ─────────────────────────────────── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 23, .85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 50;
+}
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  background: linear-gradient(135deg, rgba(15,23,42,.97) 0%, rgba(30,41,59,.95) 100%);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 22rem;
+  box-shadow: 0 0 40px rgba(6,182,212,.15);
+}
+
+.overlay-btn {
+  display: block;
+  width: 100%;
+  padding: .9rem 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: .75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  transition: all .2s ease;
+  cursor: pointer;
+  border: none;
+}
+.overlay-btn:last-child {
+  margin-bottom: 0;
+}
+.overlay-btn:active {
+  transform: scale(.97);
+}
+
+/* ── Glow text ─────────────────────────────────────────────────────────────── */
+.glow-text {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor;
+}
+
+/* ── Slide-in ──────────────────────────────────────────────────────────────── */
+.slide-in {
+  animation: slideIn .35s ease-out both;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>DINO RUN</title>
+<link rel="stylesheet" href="dino.css">
+</head>
+<body>
+
+<div id="starsBg"></div>
+
+<!-- MENU -->
+<div class="screen active" id="menuScreen">
+  <div class="hdr">
+    <div class="hdr-title">🦕 DINO RUN</div>
+    <div class="hdr-sub">Customize Your Dinosaur</div>
+  </div>
+
+  <div class="menu-body">
+    <!-- LEFT COL -->
+    <div class="col-left">
+      <div class="preview-card">
+        <div class="slabel">Preview</div>
+        <div class="preview-stage"><canvas id="previewCanvas" width="90" height="80"></canvas></div>
+        <div class="preview-name" id="previewName">CLASSIC</div>
+      </div>
+
+      <div class="card">
+        <div class="slabel">Kesulitan</div>
+        <div class="diff-grid">
+          <div class="diff-btn easy sel" data-diff="easy"><span class="diff-name">EASY</span><span class="diff-desc">Santai</span></div>
+          <div class="diff-btn medium" data-diff="medium"><span class="diff-name">NORMAL</span><span class="diff-desc">Seimbang</span></div>
+          <div class="diff-btn hard" data-diff="hard"><span class="diff-name">HARD</span><span class="diff-desc">Brutal!</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="slabel">Ukuran & Kecepatan</div>
+        <div class="slider-row">
+          <label>Ukuran</label>
+          <input type="range" id="sizeSlider" min="60" max="140" value="100" step="10">
+          <span class="slider-val" id="sizeVal">100%</span>
+        </div>
+        <div class="slider-row">
+          <label>Kecepatan</label>
+          <input type="range" id="speedSlider" min="1" max="5" value="3" step="1">
+          <span class="slider-val" id="speedVal">3</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="slabel">Opsi Extra</div>
+        <div class="toggle-row">
+          <div><div class="tgl-label">Night Mode</div><div class="tgl-desc">Langit gelap & bintang</div></div>
+          <label class="toggle"><input type="checkbox" id="nightToggle" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="tgl-label">Partikel</div><div class="tgl-desc">Efek saat lompat & lari</div></div>
+          <label class="toggle"><input type="checkbox" id="particleToggle" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="tgl-label">Bayangan</div><div class="tgl-desc">Shadow di bawah dino</div></div>
+          <label class="toggle"><input type="checkbox" id="shadowToggle" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="tgl-label">Rintangan Acak</div><div class="tgl-desc">Kaktus & burung campur</div></div>
+          <label class="toggle"><input type="checkbox" id="randomObstToggle" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label>
+        </div>
+      </div>
+
+      <button class="start-btn" id="startBtn">▶ MULAI BERMAIN</button>
+    </div>
+
+    <!-- RIGHT COL -->
+    <div class="col-right">
+      <div class="card card-shape">
+        <div class="slabel">Bentuk Dinosaurus</div>
+        <div class="opt-grid" id="shapeGrid"></div>
+      </div>
+      <div class="card">
+        <div class="slabel">Warna</div>
+        <div class="color-grid" id="colorGrid"></div>
+      </div>
+      <div class="card">
+        <div class="slabel">Aksesori</div>
+        <div class="opt-grid" id="accessoryGrid"></div>
+      </div>
+      <div class="card">
+        <div class="slabel">Efek Trail</div>
+        <div class="opt-grid" id="trailGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="gameScreen">
+  <div class="hud">
+    <div class="hud-score" id="scoreDisplay">0</div>
+    <div class="hud-hi">HI <span id="hiDisplay">0</span></div>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+
+  <div class="g-overlay" id="startOverlay">
+    <div class="ov-title">SIAP?</div>
+    <div class="ov-sub">SPASI / ↑ Lompat &nbsp;·&nbsp; ↓ Merunduk</div>
+    <div class="ov-sub" style="margin-bottom:22px;opacity:.6">Tap layar di ponsel</div>
+    <div class="act-btns">
+      <button class="act-btn" id="goBtn">▶ GO!</button>
+      <button class="act-btn sec" id="backBtn">← Menu</button>
+    </div>
+  </div>
+
+  <div class="g-overlay" id="gameOverOverlay" style="display:none">
+    <div class="ov-title">GAME OVER</div>
+    <div class="ov-score">Skor: <span id="finalScore">0</span></div>
+    <div class="ov-hi">Terbaik: <span id="finalHi">0</span></div>
+    <div class="act-btns">
+      <button class="act-btn" id="restartBtn">↺ MAIN LAGI</button>
+      <button class="act-btn sec" id="menuBtn">⚙ MENU</button>
+    </div>
+  </div>
+
+  <div class="mob-ctrl">
+    <button class="ctrl-btn" id="jumpBtn">↑</button>
+    <button class="ctrl-btn" id="duckBtn">↓</button>
+  </div>
+</div>
+
+<script src="dino.js"></script>
+</body>
+</html>

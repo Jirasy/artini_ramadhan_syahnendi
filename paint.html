@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Drawing Canvas Game</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="paint.css">
+  <link rel="stylesheet" href="paint2.css">
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 overflow-auto">
+  <div id="app" class="h-full w-full flex flex-col"><!-- Header -->
+   <header class="flex-shrink-0 px-3 py-2 md:px-6 md:py-3 bg-black/20 backdrop-blur-sm">
+    <div class="flex items-center justify-between">
+     <h1 id="appTitle" class="text-lg md:text-2xl font-extrabold text-white drop-shadow-lg">🎨 Drawing Canvas</h1>
+     <div class="flex items-center gap-2 md:gap-4">
+      <div class="bg-white/20 rounded-full px-3 py-1 md:px-4 md:py-2"><span class="text-white text-xs md:text-sm font-semibold">Skor: </span> <span id="scoreDisplay" class="text-yellow-300 font-bold text-sm md:text-lg">0</span>
+      </div><button id="helpBtn" class="tool-btn w-8 h-8 md:w-10 md:h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white text-lg">❓</button>
+     </div>
+    </div>
+   </header><!-- Main Content -->
+   <main class="flex-1 flex flex-col md:flex-row p-2 md:p-4 gap-2 md:gap-4 min-h-0"><!-- Toolbar - Mobile: horizontal, Desktop: vertical sidebar -->
+    <aside class="flex-shrink-0 md:w-20 bg-white/10 backdrop-blur-sm rounded-2xl p-2 md:p-3"><!-- Color Palette -->
+     <div class="flex md:flex-col gap-1 md:gap-2 items-center justify-center flex-wrap"><span class="text-white/70 text-xs font-semibold hidden md:block mb-1">Warna</span>
+      <div id="colorPalette" class="flex md:flex-wrap gap-1 md:gap-2 justify-center"><button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full active" style="background:#000000" data-color="#000000"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#ffffff" data-color="#ffffff"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#ef4444" data-color="#ef4444"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#f97316" data-color="#f97316"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#eab308" data-color="#eab308"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#22c55e" data-color="#22c55e"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#3b82f6" data-color="#3b82f6"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#8b5cf6" data-color="#8b5cf6"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#ec4899" data-color="#ec4899"></button> <button class="color-btn w-6 h-6 md:w-8 md:h-8 rounded-full" style="background:#6b7280" data-color="#6b7280"></button>
+      </div><!-- Custom Color --> <input type="color" id="customColor" class="w-6 h-6 md:w-8 md:h-8 rounded-full cursor-pointer border-2 border-white/50" value="#000000" title="Pilih warna kustom">
+     </div><!-- Divider -->
+     <div class="hidden md:block w-full h-px bg-white/20 my-3"></div>
+     <div class="md:hidden w-px h-6 bg-white/20 mx-2"></div><!-- Brush Size -->
+     <div class="flex md:flex-col items-center gap-1 md:gap-2"><span class="text-white/70 text-xs font-semibold hidden md:block">Kuas</span>
+      <div class="flex items-center gap-2"><span class="text-white text-xs">🖌️</span> <input type="range" id="brushSize" min="1" max="50" value="5" class="size-slider w-16 md:w-14 h-2 bg-white/30 rounded-full appearance-none cursor-pointer"> <span id="brushSizeValue" class="text-white text-xs font-bold w-6">5</span>
+      </div>
+     </div><!-- Divider -->
+     <div class="hidden md:block w-full h-px bg-white/20 my-3"></div>
+     <div class="md:hidden w-px h-6 bg-white/20 mx-2"></div><!-- Tools -->
+     <div class="flex md:flex-col gap-1 md:gap-2"><button id="eraserBtn" class="tool-btn w-8 h-8 md:w-12 md:h-12 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center text-lg md:text-xl" title="Penghapus">🧹</button> <button id="brushBtn" class="tool-btn w-8 h-8 md:w-12 md:h-12 bg-blue-500/50 hover:bg-blue-500/70 rounded-xl flex items-center justify-center text-lg md:text-xl" title="Kuas">✏️</button> <button id="fillBtn" class="tool-btn w-8 h-8 md:w-12 md:h-12 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center text-lg md:text-xl" title="Isi Warna">🪣</button>
+     </div>
+    </aside><!-- Canvas Area -->
+    <div class="flex-1 flex flex-col min-h-0"><!-- Canvas Size Control -->
+     <div class="flex-shrink-0 flex items-center justify-center gap-2 mb-2 flex-wrap"><span class="text-white/70 text-xs font-semibold">Ukuran Kanvas:</span> <select id="canvasSize" class="bg-white/20 text-white text-xs md:text-sm rounded-lg px-2 py-1 border-none outline-none cursor-pointer"> <option value="small" class="text-gray-800">Kecil (400x300)</option> <option value="medium" selected class="text-gray-800">Sedang (600x450)</option> <option value="large" class="text-gray-800">Besar (800x600)</option> <option value="custom" class="text-gray-800">Kustom</option> </select>
+      <div id="customSizeInputs" class="hidden items-center gap-1"><input type="number" id="customWidth" value="600" min="100" max="1200" class="w-16 bg-white/20 text-white text-xs rounded px-1 py-1 border-none outline-none"> <span class="text-white/50">x</span> <input type="number" id="customHeight" value="450" min="100" max="900" class="w-16 bg-white/20 text-white text-xs rounded px-1 py-1 border-none outline-none"> <button id="applyCustomSize" class="bg-green-500 hover:bg-green-600 text-white text-xs px-2 py-1 rounded">OK</button>
+      </div>
+     </div><!-- Canvas Container -->
+     <div class="flex-1 flex items-center justify-center overflow-auto min-h-0">
+      <div id="canvasWrapper" class="canvas-container relative bg-white rounded-xl shadow-2xl overflow-hidden">
+       <canvas id="drawCanvas" class="block"></canvas><img id="referenceImage" class="reference-img hidden" alt="Reference">
+      </div>
+     </div><!-- Action Buttons -->
+     <div class="flex-shrink-0 flex items-center justify-center gap-2 mt-2 flex-wrap"><button id="undoBtn" class="tool-btn bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-1 disabled:opacity-50" disabled> ↩️ <span class="hidden md:inline">Undo</span> </button> <button id="redoBtn" class="tool-btn bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-1 disabled:opacity-50" disabled> ↪️ <span class="hidden md:inline">Redo</span> </button> <button id="clearBtn" class="tool-btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-1"> 🗑️ <span id="clearBtnText">Clear</span> </button> <button id="saveBtn" class="tool-btn bg-green-500 hover:bg-green-600 text-white px-3 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-1"> 💾 <span id="saveBtnText">Save</span> </button> <button id="referenceBtn" class="tool-btn bg-purple-500 hover:bg-purple-600 text-white px-3 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-1"> 🖼️ <span class="hidden md:inline">Referensi</span> </button> <button id="newCanvasBtn" class="tool-btn bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-1"> ➕ <span class="hidden md:inline">Baru</span> </button>
+     </div>
+    </div>
+   </main><!-- Footer Stats -->
+   <footer class="flex-shrink-0 px-3 py-2 bg-black/20 backdrop-blur-sm">
+    <div class="flex items-center justify-center gap-4 md:gap-8 text-xs md:text-sm text-white/70"><span>🎯 Ketukan: <strong id="tapCount" class="text-white">0</strong></span> <span>📏 Total Stroke: <strong id="strokeCount" class="text-white">0</strong></span> <span>⏱️ Waktu: <strong id="timeDisplay" class="text-white">00:00</strong></span>
+    </div>
+   </footer>
+  </div><!-- Help Modal -->
+  <div id="helpModal" class="fixed inset-0 bg-black/50 modal-overlay hidden items-center justify-center z-50 p-4">
+   <div class="bg-white rounded-2xl p-6 max-w-md w-full max-h-[80%] overflow-auto shadow-2xl">
+    <div class="flex items-center justify-between mb-4">
+     <h2 class="text-xl font-bold text-gray-800">📖 Panduan</h2><button id="closeHelp" class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center text-gray-600">✕</button>
+    </div>
+    <div class="space-y-3 text-gray-600 text-sm">
+     <p><strong>🎨 Pilih Warna:</strong> Klik warna di palette atau gunakan color picker.</p>
+     <p><strong>🖌️ Ukuran Kuas:</strong> Geser slider untuk mengatur ketebalan.</p>
+     <p><strong>✏️ Menggambar:</strong> Klik/sentuh dan seret di kanvas.</p>
+     <p><strong>🧹 Penghapus:</strong> Hapus bagian gambar.</p>
+     <p><strong>🪣 Fill:</strong> Isi area dengan warna.</p>
+     <p><strong>↩️↪️ Undo/Redo:</strong> Batalkan atau ulangi aksi.</p>
+     <p><strong>🖼️ Referensi:</strong> Tambah gambar referensi transparan.</p>
+     <p><strong>🎯 Skor:</strong> Dihitung berdasarkan ketukan dan akurasi stroke!</p>
+    </div>
+   </div>
+  </div><!-- Clear Confirmation -->
+  <div id="clearConfirm" class="fixed inset-0 bg-black/50 modal-overlay hidden items-center justify-center z-50 p-4">
+   <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center">
+    <div class="text-5xl mb-4">
+     🗑️
+    </div>
+    <h2 class="text-xl font-bold text-gray-800 mb-2">Hapus Semua?</h2>
+    <p class="text-gray-600 mb-4">Gambar akan dihapus dan tidak bisa dikembalikan.</p>
+    <div class="flex gap-3 justify-center"><button id="cancelClear" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-xl font-semibold text-gray-700">Batal</button> <button id="confirmClear" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-xl font-semibold text-white">Hapus</button>
+    </div>
+   </div>
+  </div><!-- Reference Modal -->
+  <div id="referenceModal" class="fixed inset-0 bg-black/50 modal-overlay hidden items-center justify-center z-50 p-4">
+   <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+    <div class="flex items-center justify-between mb-4">
+     <h2 class="text-xl font-bold text-gray-800">🖼️ Gambar Referensi</h2><button id="closeReference" class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center text-gray-600">✕</button>
+    </div>
+    <div class="space-y-4">
+     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Pilih gambar referensi:</label>
+      <div id="presetReferences" class="grid grid-cols-3 gap-2 mb-3"><button class="ref-preset aspect-square bg-gradient-to-br from-red-400 to-pink-500 rounded-lg flex items-center justify-center text-3xl hover:scale-105 transition" data-ref="heart">❤️</button> <button class="ref-preset aspect-square bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center text-3xl hover:scale-105 transition" data-ref="star">⭐</button> <button class="ref-preset aspect-square bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center text-3xl hover:scale-105 transition" data-ref="tree">🌲</button> <button class="ref-preset aspect-square bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg flex items-center justify-center text-3xl hover:scale-105 transition" data-ref="house">🏠</button> <button class="ref-preset aspect-square bg-gradient-to-br from-purple-400 to-violet-500 rounded-lg flex items-center justify-center text-3xl hover:scale-105 transition" data-ref="cat">🐱</button> <button class="ref-preset aspect-square bg-gradient-to-br from-pink-400 to-rose-500 rounded-lg flex items-center justify-center text-3xl hover:scale-105 transition" data-ref="flower">🌸</button>
+      </div>
+     </div>
+     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Atau masukkan URL gambar:</label> <input type="url" id="referenceUrl" placeholder="https://example.com/image.png" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none">
+     </div>
+     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Transparansi:</label> <input type="range" id="referenceOpacity" min="10" max="80" value="30" class="w-full">
+     </div>
+     <div class="flex gap-3"><button id="applyReference" class="flex-1 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-semibold">Terapkan</button> <button id="removeReference" class="flex-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-semibold">Hapus Ref</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="paint.js"></script>
+ <script src="paint2.js"></script>
+ </body>
+</html>

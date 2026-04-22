@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maze Escape</title>
+  <link rel="stylesheet" href="maze.css">
+</head>
+<body>
+  <h1>Maze Escape</h1>
+  <p>Gunakan arrow keys atau tombol arah di layar!</p>
+
+  <div id="game-board"></div>
+  <p id="status"></p>
+
+  <div id="info">
+    <p id="steps">Langkah: 0</p>
+    <p id="time">Waktu: 0 detik</p>
+    <p id="score">Score: 0</p>
+  </div>
+
+  <!-- Tombol arah untuk HP -->
+  <div id="controls">
+    <button onclick="movePlayer(0,-1)">⬆️</button><br>
+    <button onclick="movePlayer(-1,0)">⬅️</button>
+    <button onclick="movePlayer(1,0)">➡️</button><br>
+    <button onclick="movePlayer(0,1)">⬇️</button>
+  </div>
+
+  <button id="restartBtn">Generate Maze Baru</button>
+
+  <script src="maze.js"></script>
+</body>
+</html>

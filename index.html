@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kumpulan Game - Premium</title>
+  <!-- Preconnect untuk percepat font load -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Hanya load Orbitron (display) + Poppins 400,700 saja — kurangi weight -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background — lebih simpel, dikontrol CSS saja -->
+  <div class="bg" aria-hidden="true">
+    <div class="sky" id="sky"></div>
+    <!-- Clouds: cukup 3 elemen, animasi CSS murni -->
+    <div class="clouds" aria-hidden="true">
+      <span class="cloud c1"></span>
+      <span class="cloud c2"></span>
+      <span class="cloud c3"></span>
+    </div>
+    <!-- Bintang: cukup 30 dot kecil via CSS pseudo + custom properties -->
+    <div class="stars" id="stars" aria-hidden="true"></div>
+    <div class="skyline" aria-hidden="true"></div>
+    <div class="ground" aria-hidden="true"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <h1>🎮 KUMPULAN GAME</h1>
+    <div class="header-right">
+      <time class="time-display" id="time-display" aria-live="polite">--:--</time>
+      <button id="theme-toggle" aria-label="Toggle tema gelap/terang">🌙</button>
+    </div>
+  </header>
+
+  <!-- Main Game Grid -->
+  <main id="game-grid">
+    <!-- Card dibuat minimal: hanya front, tanpa card-back (flip dihapus, popup sudah cukup) -->
+
+    <article class="game-card" data-desc="Game puzzle angka 2048, gabungkan kotak untuk mencapai skor tertinggi.">
+      <a href="2048.html">
+        <img src="2048.jpg" alt="2048" loading="lazy" width="200" height="120">
+        <h2>2048</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Breakout klasik, hancurkan semua balok dengan bola.">
+      <a href="breakout.html">
+        <img src="breakout.jpg" alt="Breakout" loading="lazy" width="200" height="120">
+        <h2>Breakout</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game catur, mainkan strategi melawan lawan.">
+      <a href="chess.html">
+        <img src="chess.jpg" alt="Chess" loading="lazy" width="200" height="120">
+        <h2>Chess</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Maze, temukan jalan keluar dari labirin.">
+      <a href="maze.html">
+        <img src="maze.jpg" alt="Maze" loading="lazy" width="200" height="120">
+        <h2>Maze</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Snake klasik, kendalikan ular dan makan makanan untuk tumbuh.">
+      <a href="snake.html">
+        <img src="snake.jpg" alt="Snake" loading="lazy" width="200" height="120">
+        <h2>Snake</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Space Shooter, tembak musuh di luar angkasa.">
+      <a href="menu.html">
+        <img src="space.jpg" alt="Space Shooter" loading="lazy" width="200" height="120">
+        <h2>Space Shooter</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Tank battle, hancurkan tank musuh dan bertahan hidup.">
+      <a href="Tank.html">
+        <img src="tank.jpg" alt="Tank" loading="lazy" width="200" height="120">
+        <h2>Tank</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Tetris, susun balok jatuh agar tidak penuh.">
+      <a href="tetris.html">
+        <img src="tetris.jpg" alt="Tetris" loading="lazy" width="200" height="120">
+        <h2>Tetris</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Typing, latih kecepatan mengetik dengan kata-kata acak.">
+      <a href="typing.html">
+        <img src="typing.jpg" alt="Typing" loading="lazy" width="200" height="120">
+        <h2>Typing</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Whack-a-Mole, pukul musuh yang muncul secepat mungkin.">
+      <a href="whack.html">
+        <img src="whack.jpg" alt="Whack-a-Mole" loading="lazy" width="200" height="120">
+        <h2>Whack-a-Mole</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Sepak-bola, tim mana yang paling banyak mencetak gol.">
+      <a href="Sepak-bola.html">
+        <img src="Sepak-bola.jpg" alt="Sepak-bola" loading="lazy" width="200" height="120">
+        <h2>Sepak-bola</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Pacman, video arkade klasik yang ikonik.">
+      <a href="pacman.html">
+        <img src="pacman.jpg" alt="Pacman" loading="lazy" width="200" height="120">
+        <h2>Pacman</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Balance Tower, bangun menara setinggi mungkin tanpa roboh!">
+      <a href="bt.html">
+        <img src="bt.jpg" alt="Balance Tower" loading="lazy" width="200" height="120">
+        <h2>Balance Tower</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Tic Tac Toe, mainkan permainan klasik ini dengan temanmu!">
+      <a href="t3.html">
+        <img src="t3.jpg" alt="Tic Tac Toe" loading="lazy" width="200" height="120">
+        <h2>Tic Tac Toe</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game balap mobil, pilih mobil favoritmu dan menangkan balapan!">
+      <a href="car.html">
+        <img src="car.jpg" alt="Car Racing" loading="lazy" width="200" height="120">
+        <h2>Car Racing</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game cocktail, buat mixologi yang lezat!">
+      <a href="hana.html">
+        <img src="cocktail.jpg" alt="Cocktail" loading="lazy" width="200" height="120">
+        <h2>Cocktail</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game dinosaurus seperti di Google Chrome, lompat dan hindari rintangan!">
+      <a href="dino.html">
+        <img src="dino.jpg" alt="Dinosaurus" loading="lazy" width="200" height="120">
+        <h2>Dinosaurus</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game monopoly, mainkan permainan klasik ini dengan temanmu!">
+      <a href="monopoly.html">
+        <img src="monopoly.jpg" alt="Monopoly" loading="lazy" width="200" height="120">
+        <h2>Monopoly</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game melukis, buat karya seni yang unik!">
+      <a href="paint.html">
+        <img src="paint.jpg" alt="Melukis" loading="lazy" width="200" height="120">
+        <h2>Melukis</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game ritme, latih koordinasi refleks tangan dengan musik!">
+      <a href="rhy.html">
+        <img src="rhy.jpg" alt="Ritme" loading="lazy" width="200" height="120">
+        <h2>Ritme</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game ludo, mainkan permainan klasik ini dengan temanmu!">
+      <a href="ludo.html">
+        <img src="ludo.jpg" alt="Ludo" loading="lazy" width="200" height="120">
+        <h2>Ludo</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game ular tangga, mainkan permainan klasik ini dengan temanmu!">
+      <a href="ut.html">
+        <img src="ut.jpg" alt="Ular Tangga" loading="lazy" width="200" height="120">
+        <h2>Ular Tangga</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game halma, mainkan permainan klasik ini dengan temanmu!">
+      <a href="halma.html">
+        <img src="halma.jpg" alt="Halma" loading="lazy" width="200" height="120">
+        <h2>Halma</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game suit, mainkan suit melawan bot dengan tampilan yang menarik!">
+      <a href="suit.html">
+        <img src="suit.jpg" alt="Suit" loading="lazy" width="200" height="120">
+        <h2>Suit</h2>
+      </a>
+    </article>
+
+    <article class="game-card" data-desc="Game Block Blast, hancurkan blok dengan strategi!">
+      <a href="bb.html">
+        <img src="bb.jpg" alt="Block Blast" loading="lazy" width="200" height="120">
+        <h2>Block Blast</h2>
+      </a>
+    </article>
+
+  </main>
+
+  <!-- Popup Deskripsi -->
+  <div id="popup" role="tooltip" aria-hidden="true">
+    <p id="popup-text"></p>
+  </div>
+
+  <!-- Road & Vehicles — dikurangi jadi 2 mobil + 1 motor -->
+  <div class="road-container" aria-hidden="true">
+    <div class="road"></div>
+    <div class="vehicle vehicle-car v1">
+      <svg viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 25 L15 15 L35 12 L65 15 L70 25 Z" fill="#3498db" stroke="#2980b9" stroke-width="1.5"/>
+        <path d="M20 20 L25 12 L55 12 L60 20 Z" fill="#5dade2" stroke="#2980b9" stroke-width="1"/>
+        <rect x="22" y="13" width="8" height="6" fill="#87ceeb" opacity="0.7"/>
+        <rect x="32" y="13" width="8" height="6" fill="#87ceeb" opacity="0.7"/>
+        <rect x="42" y="13" width="8" height="6" fill="#87ceeb" opacity="0.7"/>
+        <circle cx="18" cy="28" r="4" fill="#222" stroke="#666" stroke-width="1"/>
+        <circle cx="62" cy="28" r="4" fill="#222" stroke="#666" stroke-width="1"/>
+        <circle cx="18" cy="28" r="2.5" fill="#888"/>
+        <circle cx="62" cy="28" r="2.5" fill="#888"/>
+      </svg>
+    </div>
+    <div class="vehicle vehicle-car v2">
+      <svg viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 25 L15 15 L35 12 L65 15 L70 25 Z" fill="#e74c3c" stroke="#c0392b" stroke-width="1.5"/>
+        <path d="M20 20 L25 12 L55 12 L60 20 Z" fill="#ff6b6b" stroke="#c0392b" stroke-width="1"/>
+        <rect x="22" y="13" width="8" height="6" fill="#87ceeb" opacity="0.7"/>
+        <rect x="32" y="13" width="8" height="6" fill="#87ceeb" opacity="0.7"/>
+        <rect x="42" y="13" width="8" height="6" fill="#87ceeb" opacity="0.7"/>
+        <circle cx="18" cy="28" r="4" fill="#222" stroke="#666" stroke-width="1"/>
+        <circle cx="62" cy="28" r="4" fill="#222" stroke="#666" stroke-width="1"/>
+        <circle cx="18" cy="28" r="2.5" fill="#888"/>
+        <circle cx="62" cy="28" r="2.5" fill="#888"/>
+      </svg>
+    </div>
+    <div class="vehicle vehicle-motor v3">
+      <svg viewBox="0 0 60 35" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="30" cy="18" rx="16" ry="10" fill="#27ae60" stroke="#229954" stroke-width="1.5"/>
+        <rect x="24" y="12" width="12" height="4" rx="2" fill="#229954"/>
+        <circle cx="12" cy="24" r="5" fill="#222" stroke="#666" stroke-width="1.5"/>
+        <circle cx="48" cy="24" r="5" fill="#222" stroke="#666" stroke-width="1.5"/>
+        <circle cx="12" cy="24" r="2.5" fill="#888"/>
+        <circle cx="48" cy="24" r="2.5" fill="#888"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="grass" aria-hidden="true"></div>
+
+  <footer>
+    <p>Created by: Jimny Al Ramadhan Syahnendi &middot; X PPLG</p>
+  </footer>
+
+  <!-- bg.js: background + waktu (diload defer) -->
+  <script src="bg.js" defer></script>
+  <!-- ui.js: kartu + popup + tema (diload defer) -->
+  <script src="ui.js" defer></script>
+</body>
+</html>

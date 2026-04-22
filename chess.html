@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Chess Master</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=Source+Sans+3:wght@300;400;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chess.css">
+  <link rel="stylesheet" href="chess2.css">
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-wrapper" id="app">
+   <!-- TOAST -->
+   <div class="toast" id="toast"></div><!-- ========== SETUP SCREEN ========== -->
+   <section id="setupScreen" class="screen active flex-col items-center justify-center h-full px-4 py-8">
+    <div class="w-full max-w-md mx-auto flex flex-col items-center gap-6">
+     <div class="text-center anim-in">
+      <h1 class="font-display text-4xl md:text-5xl font-black mb-2" id="mainTitle">♚ Chess Master</h1>
+      <p class="text-sm opacity-60" id="mainSubtitle">Atur permainan Anda</p>
+     </div><!-- Mode choice -->
+     <div class="w-full anim-in-d1">
+      <label class="block text-sm font-semibold mb-2 opacity-80">Mode Permainan</label>
+      <div class="flex gap-3 flex-wrap" id="modeChoice">
+       <button class="opt-btn active flex-1" data-val="pvp">👥 Teman</button> <button class="opt-btn flex-1" data-val="pvc">🤖 AI</button>
+      </div>
+     </div><!-- Color choice (show only in PvP) -->
+     <div class="w-full anim-in-d1" id="colorDiv">
+      <label class="block text-sm font-semibold mb-2 opacity-80">Pilih Warna</label>
+      <div class="flex gap-3" id="colorChoice">
+       <button class="opt-btn active flex-1" data-val="white">⬜ Putih</button> <button class="opt-btn flex-1" data-val="black">⬛ Hitam</button> <button class="opt-btn flex-1" data-val="random">🎲 Acak</button>
+      </div>
+     </div><!-- AI Difficulty (show only in PvC) -->
+     <div class="w-full anim-in-d2 hidden" id="diffDiv">
+      <label class="block text-sm font-semibold mb-2 opacity-80">Tingkat Kesulitan AI</label>
+      <div class="flex gap-3 flex-wrap" id="diffChoice">
+       <button class="opt-btn active" data-val="easy">🟢 Mudah</button> <button class="opt-btn" data-val="medium">🟡 Sedang</button> <button class="opt-btn" data-val="hard">🔴 Sulit</button>
+      </div>
+     </div><!-- Timer -->
+     <div class="w-full anim-in-d2">
+      <label class="block text-sm font-semibold mb-2 opacity-80">Waktu</label>
+      <div class="flex gap-3 flex-wrap" id="timeChoice">
+       <button class="opt-btn active" data-val="0">♾️ Tanpa Batas</button> <button class="opt-btn" data-val="300">5 Menit</button> <button class="opt-btn" data-val="600">10 Menit</button> <button class="opt-btn" data-val="900">15 Menit</button>
+      </div>
+     </div><!-- Board theme -->
+     <div class="w-full anim-in-d2">
+      <label class="block text-sm font-semibold mb-2 opacity-80">Tema Papan</label>
+      <div class="flex gap-3 flex-wrap" id="themeChoice">
+       <button class="opt-btn active" data-val="classic">🏛️ Klasik</button> <button class="opt-btn" data-val="green">🌲 Hijau</button> <button class="opt-btn" data-val="blue">🌊 Biru</button> <button class="opt-btn" data-val="dark">🌑 Gelap</button>
+      </div>
+     </div><!-- Flip board -->
+     <div class="w-full anim-in-d3 flex items-center gap-3">
+      <input type="checkbox" id="flipCheck" class="w-5 h-5 accent-[#e94560]"> <label for="flipCheck" class="text-sm font-semibold opacity-80">Putar papan setiap giliran</label>
+     </div><button id="startBtn" class="anim-in-d3 w-full py-3 rounded-xl font-bold text-lg tracking-wide transition-all hover:scale-[1.02] active:scale-[0.98]" style="background: var(--primary-color);"> Mulai Bermain </button>
+    </div>
+   </section><!-- ========== GAME SCREEN ========== -->
+   <section id="gameScreen" class="screen flex-col h-full">
+    <div class="flex flex-col lg:flex-row h-full w-full">
+     <!-- Left: Board area -->
+     <div class="flex-1 flex flex-col items-center justify-center p-3 lg:p-6 min-w-0">
+      <!-- Top player info -->
+      <div class="w-full max-w-[520px] flex items-center justify-between mb-1 px-1">
+       <div class="flex items-center gap-2">
+        <span class="text-lg" id="topPlayerIcon"></span> <span class="font-semibold text-sm" id="topPlayerName"></span> <span class="captured-row" id="topCaptured"></span>
+       </div><span class="font-mono text-sm font-bold px-2 py-1 rounded" style="background:var(--secondary-color);" id="topTimer">--:--</span>
+      </div><!-- Board -->
+      <div class="w-full max-w-[520px]">
+       <div class="chess-board" id="board"></div>
+      </div><!-- Bottom player info -->
+      <div class="w-full max-w-[520px] flex items-center justify-between mt-1 px-1">
+       <div class="flex items-center gap-2">
+        <span class="text-lg" id="bottomPlayerIcon"></span> <span class="font-semibold text-sm" id="bottomPlayerName"></span> <span class="captured-row" id="bottomCaptured"></span>
+       </div><span class="font-mono text-sm font-bold px-2 py-1 rounded" style="background:var(--secondary-color);" id="bottomTimer">--:--</span>
+      </div><!-- Action buttons -->
+      <div class="flex gap-3 mt-3">
+       <button id="undoBtn" class="opt-btn flex items-center gap-1 text-xs"><i data-lucide="undo-2" style="width:14px;height:14px;"></i> Undo</button> <button id="resignBtn" class="opt-btn flex items-center gap-1 text-xs"><i data-lucide="flag" style="width:14px;height:14px;"></i> Menyerah</button> <button id="drawBtn" class="opt-btn flex items-center gap-1 text-xs"><i data-lucide="handshake" style="width:14px;height:14px;"></i> Seri</button> <button id="newGameBtn" class="opt-btn flex items-center gap-1 text-xs"><i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i> Baru</button>
+      </div>
+     </div><!-- Right: Move history & info (sidebar on desktop, bottom on mobile) -->
+     <aside class="w-full lg:w-72 xl:w-80 flex flex-col p-3 lg:p-4 lg:border-l border-t lg:border-t-0" style="border-color: var(--secondary-color); background: var(--surface-color);">
+      <div class="flex items-center justify-between mb-2">
+       <h2 class="font-display text-lg font-bold" id="gameTitle">♚ Chess Master</h2><span class="text-xs px-2 py-1 rounded font-semibold" id="turnBadge" style="background:var(--primary-color);">Giliran: Putih</span>
+      </div>
+      <div class="text-xs font-semibold opacity-60 mb-2">
+       📖 Cara Bermain
+      </div>
+      <div class="text-xs p-3 rounded mb-3" style="background: rgba(233,69,96,0.15); border-left: 3px solid var(--primary-color);">
+       <div class="mb-2 flex items-start gap-2"><span class="text-lg">1️⃣</span>
+        <div><strong>Klik &amp; Angkat Pion</strong>
+         <div class="opacity-70 text-xs">
+          Pion akan terangkat ke atas ✨
+         </div>
+        </div>
+       </div>
+       <div class="mb-2 flex items-start gap-2"><span class="text-lg">2️⃣</span>
+        <div><strong>Gunakan Panah Keyboard</strong>
+         <div class="opacity-70 text-xs">
+          ↑↓←→ untuk pilih kotak tujuan
+         </div>
+        </div>
+       </div>
+       <div class="flex items-start gap-2"><span class="text-lg">3️⃣</span>
+        <div><strong>Tekan Enter / Spasi</strong>
+         <div class="opacity-70 text-xs">
+          Pion akan jatuh ke kotak tujuan 💫
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="text-xs font-semibold opacity-60 mb-1">
+       Riwayat Gerakan
+      </div>
+      <div class="move-list flex-1 rounded-lg p-2 text-sm font-mono" id="moveList" style="background:var(--bg-color);">
+       <div class="opacity-40 text-center text-xs py-4">
+        Belum ada gerakan
+       </div>
+      </div>
+      <div class="mt-2 text-xs opacity-50 text-center" id="statusText">
+       Permainan dimulai
+      </div>
+     </aside>
+    </div>
+   </section><!-- Promotion overlay (hidden) -->
+   <div class="promo-overlay" id="promoOverlay" style="display:none;"></div><!-- Game over modal (hidden) -->
+   <div class="game-over-modal" id="gameOverModal" style="display:none;"></div>
+  </div>
+  <script src="chess.js"></script>
+  <script src="chess2.js"></script>
+ </body>
+</html>

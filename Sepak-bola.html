@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Game Sepak Bola</title>
+    <link rel="stylesheet" href="Sepak-bola.css">
+</head>
+
+<body>
+    <!-- ORIENTATION WARNING -->
+    <div id="orientation-warning">
+        <div class="icon">📱↻</div>
+        <h2>📐 Putar Ponsel Anda</h2>
+        <p>Untuk pengalaman bermain terbaik, gunakan ponsel dalam posisi Landscape (Mendatar)</p>
+        <button class="btn-ignore" onclick="ignoreOrientation()">Tetap Main</button>
+    </div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="ui-layer">
+            <div class="hud-top">
+                <div class="score-display" id="score-board">
+                    <div class="score-team">
+                        <div class="team-badge" id="score-team1-badge"></div>
+                        <span id="score-team1">0</span>
+                    </div>
+                    <span>-</span>
+                    <div class="score-team">
+                        <span id="score-team2">0</span>
+                        <div class="team-badge" id="score-team2-badge"></div>
+                    </div>
+                </div>
+                <button class="btn-pause" onclick="togglePause()">❚❚</button>
+            </div>
+
+            <div id="mobile-controls">
+                <div class="joystick-container">
+                    <div class="joystick-area" id="joystick">
+                        <div class="joystick-knob" id="joystick-knob"></div>
+                    </div>
+                </div>
+                <div class="shoot-container">
+                    <div class="btn-shoot" id="btn-shoot">SHOOT</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENU UTAMA -->
+        <div id="main-menu" class="screen">
+            <h1 class="menu-title">⚽ SUPER KICK ULTIMATE ⚽</h1>
+            <p class="menu-subtitle">Pilih tim & posisi favoritmu!</p>
+
+            <div class="form-container">
+                <!-- PEMILIHAN POSISI -->
+                <div class="form-group">
+                    <label>🕹️ PILIH POSISI:</label>
+                    <div class="position-options">
+                        <div class="position-card selected" id="pos-attacker" onclick="selectPosition('attacker')">
+                            <div class="icon">⚽</div>
+                            <div class="title">PENYERANG</div>
+                            <div class="desc">Bermain menyerang<br>+ kontrol penuh</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🏆 PILIH TIM:</label>
+                    <select id="team-preset" onchange="updateTeamInput()">
+                        <optgroup label="🇬🇧 Premier League">
+                            <option value="arsenal">Arsenal</option>
+                            <option value="manutd">Manchester United</option>
+                            <option value="liverpool">Liverpool</option>
+                            <option value="mancity">Manchester City</option>
+                            <option value="chelsea">Chelsea</option>
+                            <option value="tottenham">Tottenham Hotspur</option>
+                            <option value="newcastle">Newcastle United</option>
+                            <option value="westham">West Ham United</option>
+                            <option value="liverpool">Aston Villa</option>
+                            <option value="brighton">Brighton & Hove</option>
+                        </optgroup>
+                        <optgroup label="🇪🇸 La Liga">
+                            <option value="realmadrid">Real Madrid</option>
+                            <option value="barcelona">Barcelona</option>
+                            <option value="atletico">Atlético Madrid</option>
+                            <option value="sevilla">Sevilla</option>
+                            <option value="betis">Real Betis</option>
+                            <option value="villareal">Villarreal</option>
+                            <option value="realsociedad">Real Sociedad</option>
+                            <option value="athletic">Athletic Bilbao</option>
+                        </optgroup>
+                        <optgroup label="🇮🇹 Serie A">
+                            <option value="juventus">Juventus</option>
+                            <option value="inter">Inter Milan</option>
+                            <option value="milan">AC Milan</option>
+                            <option value="napoli">Napoli</option>
+                            <option value="roma">AS Roma</option>
+                            <option value="lazio">Lazio</option>
+                            <option value="atalanta">Atalanta</option>
+                            <option value="fiorentina">Fiorentina</option>
+                        </optgroup>
+                        <optgroup label="🇩🇪 Bundesliga">
+                            <option value="bayern">Bayern Munich</option>
+                            <option value="dortmund">Borussia Dortmund</option>
+                            <option value="leverkusen">Bayer Leverkusen</option>
+                            <option value="rbleipzig">RB Leipzig</option>
+                            <option value="frankfurt">Eintracht Frankfurt</option>
+                            <option value="mgladbach">M"gladbach</option>
+                        </optgroup>
+                        <optgroup label="🇫🇷 Ligue 1">
+                            <option value="psg">Paris Saint-Germain</option>
+                            <option value="marseille">Olympique Marseille</option>
+                            <option value="lyon">Olympique Lyon</option>
+                            <option value="monaco">AS Monaco</option>
+                            <option value="lille">Lille</option>
+                            <option value="rennes">Stade Rennais</option>
+                        </optgroup>
+                        <optgroup label="🇵🇹 Primeira Liga">
+                            <option value="benfica">Benfica</option>
+                            <option value="porto">Porto</option>
+                            <option value="sporting">Sporting CP</option>
+                            <option value="braga">Braga</option>
+                        </optgroup>
+                        <optgroup label="🇳🇱 Eredivisie">
+                            <option value="ajax">Ajax Amsterdam</option>
+                            <option value="feyenoord">Feyenoord</option>
+                            <option value="psveindhoven">PSV Eindhoven</option>
+                            <option value="az">AZ Alkmaar</option>
+                        </optgroup>
+                        <optgroup label="🇧🇷 Serie A Brasil">
+                            <option value="flamengo">Flamengo</option>
+                            <option value="palmeiras">Palmeiras</option>
+                            <option value="corinthians">Corinthians</option>
+                            <option value="saopaulo">São Paulo</option>
+                            <option value="santos">Santos</option>
+                            <option value="botafogo">Botafogo</option>
+                            <option value="vasco">Vasco da Gama</option>
+                            <option value="cruzeiro">Cruzeiro</option>
+                        </optgroup>
+                        <optgroup label="🇦🇷 Primera División">
+                            <option value="boca">Boca Juniors</option>
+                            <option value="river">River Plate</option>
+                            <option value="independiente">Independiente</option>
+                            <option value="racing">Racing Club</option>
+                            <option value="sanlorenzo">San Lorenzo</option>
+                        </optgroup>
+                        <optgroup label="🌍 Lainnya">
+                            <option value="galatasaray">Galatasaray (Turki)</option>
+                            <option value="fenerbahce">Fenerbahçe (Turki)</option>
+                            <option value="shakhtar">Shakhtar Donetsk</option>
+                            <option value="zenit">Zenit St. Petersburg</option>
+                            <option value="celtic">Celtic (Skotlandia)</option>
+                            <option value="rangers">Rangers (Skotlandia)</option>
+                            <option value="olympiacos">Olympiacos (Yunani)</option>
+                            <option value="aek">AEK Athens (Yunani)</option>
+                            <option value="clubbrugge">Club Brugge (Belgia)</option>
+                            <option value="youngboys">Young Boys (Swiss)</option>
+                            <option value="copenhagen">FC Copenhagen (Denmark)</option>
+                            <option value="rosenborg">Rosenborg (Norwegia)</option>
+                            <option value="salzburg">Red Bull Salzburg (Austria)</option>
+                            <option value="dinamozagreb">Dinamo Zagreb (Kroasia)</option>
+                            <option value="ferencvaros">Ferencváros (Hungaria)</option>
+                            <option value="legia">Legia Warsaw (Polandia)</option>
+                            <option value="spartapraha">Sparta Prague (Rep. Ceko)</option>
+                            <option value="fcsb">FCSB Steaua (Rumania)</option>
+                            <option value="maccabi">Maccabi Tel Aviv (Israel)</option>
+                            <option value="alhilal">Al Hilal (Arab Saudi)</option>
+                            <option value="alahly">Al Ahly (Mesir)</option>
+                            <option value="wydad">Wydad Casablanca (Maroko)</option>
+                            <option value="mamelodi">Mamelodi Sundowns (Afsel)</option>
+                            <option value="sydney">Sydney FC (Australia)</option>
+                            <option value="urawa">Urawa Red Diamonds (Jepang)</option>
+                            <option value="yokohama">Yokohama F. Marinos</option>
+                            <option value="kashima">Kashima Antlers (Jepang)</option>
+                            <option value="ulsan">Ulsan Hyundai (Korea)</option>
+                            <option value="beijing">Beijing Guoan (China)</option>
+                            <option value="custom">🏆 TIM CUSTOM</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group" id="custom-name-group" style="display: none;">
+                    <label>NAMA TIM CUSTOM:</label>
+                    <input type="text" id="player-name" placeholder="Masukkan nama tim..." maxlength="15">
+                </div>
+
+                <div class="form-group">
+                    <label>🎨 WARNA JERSEY:</label>
+                    <div class="color-row">
+                        <div class="color-group">
+                            <label>TIM KAMU</label>
+                            <input type="color" id="player-color" value="#FF0000">
+                        </div>
+                        <div class="color-group">
+                            <label>TIM LAWAN</label>
+                            <input type="color" id="enemy-color" value="#0000FF">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-main" onclick="startGame()">⚽ MULAI PERMAINAN</button>
+            </div>
+
+            <div class="controls-info">
+                <strong>📱 Kontrol:</strong><br>
+                PC: WASD/Space | ESC: Pause<br>
+                HP: Joystick + Tombol Shoot
+            </div>
+        </div>
+
+        <!-- MENU PAUSE -->
+        <div id="pause-menu" class="screen hidden">
+            <h1 class="menu-title">⏸️ PERMAINAN DIIJEDA</h1>
+            <div class="form-container">
+                <button class="btn-main" onclick="resumeGame()">▶️ LANJUT BERMAIN</button>
+                <button class="btn-secondary" onclick="resetGame()">🔄 RESET SKOR</button>
+                <button class="btn-secondary" style="background: linear-gradient(135deg, #6c757d, #495057);"
+                    onclick="quitGame()">🚪 KELUAR KE MENU</button>
+            </div>
+        </div>
+
+        <!-- MENU GOL -->
+        <div id="goal-menu" class="screen hidden" style="background: rgba(0,0,0,0.85);">
+            <h1 class="menu-title" style="font-size: 55px;">🥅 GOL!!! 🥅</h1>
+            <p id="goal-text" style="font-size: 24px; margin: 20px 0; color: #ffd700;"></p>
+            <p style="font-size: 18px; color: #aaa;">Lanjut dalam <span id="countdown">3</span> detik...</p>
+        </div>
+
+    </div>
+
+
+    <script src="Sepak-bola.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #f0f0f0;
+}
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(21, 20px);
+  grid-template-rows: repeat(21, 20px);
+  gap: 2px;
+  margin: 20px auto;
+  width: max-content;
+}
+.cell {
+  width: 20px;
+  height: 20px;
+}
+.wall {
+  background: #333;
+}
+.path {
+  background: #ddd;
+}
+.player {
+  background: blue;
+}
+.finish {
+  background: green;
+}
+#controls {
+  margin-top: 20px;
+}
+#controls button {
+  font-size: 24px;
+  margin: 5px;
+  padding: 10px 20px;
+}
+#restartBtn {
+  margin-top: 15px;
+  font-size: 18px;
+  padding: 8px 16px;
+}
+#info {
+  margin-top: 15px;
+  font-size: 18px;
+}

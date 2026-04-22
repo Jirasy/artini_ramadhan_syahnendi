@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Monopoly</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <script src="/_sdk/element_sdk.js"></script>
+    <link rel="stylesheet" href="monopoly.css">
+    <link rel="stylesheet" href="monopoly2.css">
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+</head>
+
+<body class="h-full overflow-hidden"><!-- ========== MENU SCREEN ========== -->
+    <div id="menuScreen" class="screen active flex-col items-center justify-center p-4" style="overflow-y:auto;">
+        <div class="w-full max-w-lg mx-auto text-center anim-fade">
+            <div class="mb-2"><span class="text-6xl">🎩</span>
+            </div>
+            <h1 id="titleText" class="font-display text-5xl md:text-6xl font-black shimmer-text mb-2">MONOPOLY</h1>
+            <p class="text-sm opacity-60 mb-8">Classic Board Game</p>
+            <div class="space-y-4"><button onclick="showSetup()"
+                    class="btn-primary w-full text-lg flex items-center justify-center gap-2"> <i data-lucide="play"
+                        style="width:20px;height:20px;"></i> New Game </button> <button onclick="showRules()"
+                    class="btn-secondary w-full flex items-center justify-center gap-2"> <i data-lucide="book-open"
+                        style="width:18px;height:18px;"></i> How to Play </button>
+            </div>
+        </div>
+    </div><!-- ========== SETUP SCREEN ========== -->
+    <div id="setupScreen" class="screen flex-col items-center p-4" style="overflow-y:auto;">
+        <div class="w-full max-w-lg mx-auto anim-slide" style="padding-bottom:40px;"><button onclick="showMenu()"
+                class="btn-secondary mb-4 text-sm flex items-center gap-1"> <i data-lucide="arrow-left"
+                    style="width:16px;height:16px;"></i> Back </button>
+            <h2 class="font-display text-3xl font-bold mb-6" style="color:var(--primary-color);">Game Setup</h2>
+            <!-- Player Count -->
+            <div class="mb-6"><label class="block text-sm font-semibold mb-2 opacity-80">Number of Players</label>
+                <div class="flex gap-2" id="playerCountBtns"></div>
+            </div><!-- Game Mode -->
+            <div class="mb-6"><label class="block text-sm font-semibold mb-2 opacity-80">Game Mode</label>
+                <div class="flex gap-3"><button onclick="setMode('friends')" id="modeFriends"
+                        class="btn-secondary flex-1 flex flex-col items-center gap-1 py-3"> <i data-lucide="users"
+                            style="width:22px;height:22px;"></i> <span class="text-xs">Friends</span> </button> <button
+                        onclick="setMode('bots')" id="modeBots"
+                        class="btn-secondary flex-1 flex flex-col items-center gap-1 py-3"> <i data-lucide="cpu"
+                            style="width:22px;height:22px;"></i> <span class="text-xs">vs Bots</span> </button> <button
+                        onclick="setMode('mixed')" id="modeMixed"
+                        class="btn-secondary flex-1 flex flex-col items-center gap-1 py-3"> <i data-lucide="shuffle"
+                            style="width:22px;height:22px;"></i> <span class="text-xs">Mixed</span> </button>
+                </div>
+            </div><!-- Players Setup -->
+            <div id="playersSetup" class="space-y-4 mb-6"></div><!-- Start --> <button onclick="startGame()"
+                class="btn-primary w-full text-lg mt-4"> 🎲 Start Game </button>
+        </div>
+    </div><!-- ========== RULES SCREEN ========== -->
+    <div id="rulesScreen" class="screen flex-col items-center p-4" style="overflow-y:auto;">
+        <div class="w-full max-w-lg mx-auto anim-slide" style="padding-bottom:40px;"><button onclick="showMenu()"
+                class="btn-secondary mb-4 text-sm flex items-center gap-1"> <i data-lucide="arrow-left"
+                    style="width:16px;height:16px;"></i> Back </button>
+            <h2 class="font-display text-3xl font-bold mb-4" style="color:var(--primary-color);">How to Play</h2>
+            <div class="space-y-4 text-sm opacity-90 leading-relaxed">
+                <div class="player-panel">
+                    <strong>🎯 Objective:</strong> Be the last player standing by bankrupting all opponents!
+                </div>
+                <div class="player-panel">
+                    <strong>🎲 Rolling:</strong> Roll two dice and move your token. If you roll doubles, roll again!
+                </div>
+                <div class="player-panel">
+                    <strong>🏠 Properties:</strong> Land on an unowned property to buy it. If someone owns it, pay rent!
+                </div>
+                <div class="player-panel">
+                    <strong>🏗️ Houses:</strong> Own all properties of one color to build houses (up to 5). Houses
+                    increase rent.
+                </div>
+                <div class="player-panel">
+                    <strong>💰 GO:</strong> Collect $200 each time you pass GO.
+                </div>
+                <div class="player-panel">
+                    <strong>🚔 Jail:</strong> Land on "Go to Jail" to go to jail. Pay $50, use a card, or roll doubles
+                    to escape.
+                </div>
+                <div class="player-panel">
+                    <strong>🎴 Cards:</strong> Community Chest and Chance cards give random events!
+                </div>
+                <div class="player-panel">
+                    <strong>💸 Tax:</strong> Income Tax costs $200, Luxury Tax costs $100.
+                </div>
+                <div class="player-panel">
+                    <strong>🚂 Railroads:</strong> Rent increases with each railroad owned (1=$25, 2=$50, 3=$100,
+                    4=$200).
+                </div>
+                <div class="player-panel">
+                    <strong>💡 Utilities:</strong> Rent = 4x dice roll (1 utility) or 10x dice roll (2 utilities).
+                </div>
+            </div>
+        </div>
+    </div><!-- ========== GAME SCREEN ========== -->
+    <div id="gameScreen" class="screen flex-col h-full"><!-- Top bar -->
+        <header class="flex items-center justify-between px-3 py-2 border-b border-white/10 flex-shrink-0"
+            style="background:var(--surface-color);"><button onclick="confirmQuit()"
+                class="text-xs opacity-60 hover:opacity-100 flex items-center gap-1"> <i data-lucide="log-out"
+                    style="width:14px;height:14px;"></i> Quit </button> <span id="turnIndicator"
+                class="text-sm font-bold" style="color:var(--primary-color);"></span> <button onclick="toggleInfo()"
+                class="text-xs opacity-60 hover:opacity-100 flex items-center gap-1"> <i data-lucide="info"
+                    style="width:14px;height:14px;"></i> </button>
+        </header><!-- Main game area -->
+        <div class="flex-1 flex flex-col lg:flex-row overflow-hidden" style="min-height:0;"><!-- Board -->
+            <div class="flex-1 flex items-center justify-center p-2 overflow-auto" style="min-height:0;">
+                <div id="boardContainer" class="game-board-container" style="width:min(100%, 600px); max-height:100%;">
+                </div>
+            </div><!-- Side panel (desktop) / Bottom panel (mobile) -->
+            <aside id="sidePanel"
+                class="lg:w-72 flex-shrink-0 border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col overflow-hidden max-h-[40%] lg:max-h-full"
+                style="background:var(--surface-color);"><!-- Players -->
+                <div class="p-2 overflow-y-auto flex-1" style="min-height:0;">
+                    <div id="playerPanels" class="space-y-2"></div>
+                </div><!-- Action area -->
+                <div id="actionArea" class="p-3 border-t border-white/10 flex-shrink-0"></div>
+            </aside>
+        </div>
+    </div><!-- ========== MODAL ========== -->
+    <div id="modalOverlay" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeModal()">
+        <div id="modalContent" class="modal-content anim-bounce"></div>
+    </div><!-- ========== QUIT CONFIRMATION ========== -->
+    <div id="quitOverlay" class="modal-overlay" style="display:none;">
+        <div class="modal-content text-center anim-bounce">
+            <p class="text-lg font-bold mb-4">Quit this game?</p>
+            <div class="flex gap-3"><button onclick="document.getElementById('quitOverlay').style.display='none'"
+                    class="btn-secondary flex-1">Cancel</button> <button onclick="quitGame()"
+                    class="btn-primary flex-1">Quit</button>
+            </div>
+        </div>
+    </div>
+    <script src="monopoly.js"></script>
+    <script src="monopoly2.js"></script>
+</body>
+
+</html>

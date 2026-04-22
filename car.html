@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Racing Game</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Rajdhani:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="car.css">
+  <link rel="stylesheet" href="car2.css">
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto"><!-- MENU SCREEN -->
+   <div id="menu-screen" class="h-full w-full" style="background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);"><!-- Stars background -->
+    <div id="stars" class="absolute inset-0 overflow-hidden"></div>
+    <div class="relative z-10 h-full flex flex-col items-center justify-start py-8 px-4 overflow-auto"><!-- Title -->
+     <h1 id="game-title" class="game-title text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 mb-2 text-center">TURBO RACER</h1>
+     <p class="text-gray-400 text-lg mb-8">🏎️ Balap Mobil Ekstrem 🏎️</p><!-- Car Color Selection -->
+     <div class="bg-white/5 backdrop-blur rounded-2xl p-6 mb-6 w-full max-w-md">
+      <h2 class="game-title text-xl text-yellow-400 mb-4 text-center">🎨 Pilih Warna Mobil</h2>
+      <div id="color-options" class="flex flex-wrap justify-center gap-3"><!-- Colors will be added by JS -->
+      </div><!-- Car Preview -->
+      <div class="mt-6 flex justify-center">
+       <svg id="car-preview" width="80" height="140" viewbox="0 0 50 90"><defs>
+         <lineargradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ff3333" />
+          <stop offset="100%" style="stop-color:#cc0000" />
+         </lineargradient>
+         <lineargradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#87CEEB" />
+          <stop offset="100%" style="stop-color:#4a90a4" />
+         </lineargradient>
+        </defs> <!-- Car body --> <path d="M10,80 L10,35 Q10,25 15,20 L20,10 Q25,5 25,5 Q25,5 30,10 L35,20 Q40,25 40,35 L40,80 Q40,85 35,85 L15,85 Q10,85 10,80" fill="url(#carGradient)" /> <!-- Windows --> <path d="M15,35 L18,22 Q25,18 32,22 L35,35 Z" fill="url(#glassGradient)" /> <rect x="15" y="40" width="20" height="15" rx="2" fill="url(#glassGradient)" opacity="0.8" /> <!-- Headlights --> <ellipse cx="15" cy="75" rx="3" ry="5" fill="#ffff00" /> <ellipse cx="35" cy="75" rx="3" ry="5" fill="#ffff00" /> <!-- Racing stripes --> <rect x="23" y="10" width="4" height="70" fill="white" opacity="0.3" /> <!-- Wheels --> <rect x="5" y="25" width="8" height="20" rx="3" fill="#222" /> <rect x="37" y="25" width="8" height="20" rx="3" fill="#222" /> <rect x="5" y="60" width="8" height="20" rx="3" fill="#222" /> <rect x="37" y="60" width="8" height="20" rx="3" fill="#222" />
+       </svg>
+      </div>
+     </div><!-- Level Selection -->
+     <div class="bg-white/5 backdrop-blur rounded-2xl p-6 mb-6 w-full max-w-md">
+      <h2 class="game-title text-xl text-yellow-400 mb-4 text-center">🎮 Pilih Level</h2>
+      <div id="level-options" class="grid grid-cols-3 gap-3"><!-- Levels will be added by JS -->
+      </div>
+     </div><!-- Game Mode -->
+     <div class="bg-white/5 backdrop-blur rounded-2xl p-6 mb-8 w-full max-w-md">
+      <h2 class="game-title text-xl text-yellow-400 mb-4 text-center">⚡ Mode Permainan</h2>
+      <div id="mode-options" class="grid grid-cols-2 gap-3"><!-- Modes will be added by JS -->
+      </div>
+     </div><!-- Start Button --> <button id="start-btn" class="btn-primary text-xl"> 🚀 Mulai Balapan! </button> <!-- Instructions -->
+     <div class="mt-6 text-center text-gray-400 text-sm">
+      <p>⬅️ ➡️ atau A/D untuk bergerak</p>
+      <p>⬆️ atau W untuk turbo boost</p>
+     </div>
+    </div>
+   </div><!-- GAME SCREEN -->
+   <div id="game-screen" class="h-full w-full hidden">
+    <div class="road" id="road">
+     <div class="road-side left"></div>
+     <div class="road-side right"></div><!-- Road lines container -->
+     <div id="road-lines" class="absolute inset-0"></div><!-- Speed lines effect -->
+     <div id="speed-lines" class="speed-lines"></div><!-- HUD -->
+     <div class="hud">
+      <div class="hud-item"><span class="text-gray-400 text-sm">SKOR</span>
+       <div id="score" class="game-title text-2xl text-yellow-400">
+        0
+       </div>
+      </div>
+      <div class="hud-item"><span class="text-gray-400 text-sm">KECEPATAN</span>
+       <div id="speed" class="game-title text-2xl text-green-400">
+        0 km/h
+       </div>
+      </div>
+      <div class="hud-item"><span class="text-gray-400 text-sm">NYAWA</span>
+       <div id="lives" class="text-2xl">
+        ❤️❤️❤️
+       </div>
+      </div>
+     </div><!-- Player car will be added by JS -->
+     <div id="player-container"></div><!-- Enemy cars container -->
+     <div id="enemies-container"></div><!-- Powerups container -->
+     <div id="powerups-container"></div><!-- Game Over Overlay -->
+     <div id="game-over" class="game-over-overlay hidden">
+      <h2 class="game-title text-5xl text-red-500 mb-4">GAME OVER</h2>
+      <p class="text-2xl text-white mb-2">Skor Akhir:</p>
+      <p id="final-score" class="game-title text-6xl text-yellow-400 mb-8">0</p><button id="restart-btn" class="btn-primary">🔄 Main Lagi</button> <button id="menu-btn" class="mt-4 text-gray-400 hover:text-white transition">← Kembali ke Menu</button>
+     </div><!-- Pause Overlay -->
+     <div id="pause-overlay" class="game-over-overlay hidden">
+      <h2 class="game-title text-5xl text-yellow-400 mb-8">⏸️ PAUSE</h2><button id="resume-btn" class="btn-primary mb-4">▶️ Lanjutkan</button> <button id="quit-btn" class="text-gray-400 hover:text-white transition">← Keluar ke Menu</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="car.js"></script>
+ <script src="car2.js"></script>
+</body>
+</html>
