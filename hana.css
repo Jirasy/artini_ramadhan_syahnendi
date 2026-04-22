@@ -1,0 +1,532 @@
+/* ===== RESET & BASE ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: 'Fredoka', sans-serif;
+  touch-action: manipulation;
+}
+
+.app-wrapper {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg,#1a0a2e 0%,#2d1b4e 30%,#1a0a2e 60%,#0f051d 100%);
+  background-size: 200% 200%;
+  animation: bgShift 15s ease-in-out infinite;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes floatUp {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-80px) scale(0.5); opacity: 0; }
+}
+@keyframes shake {
+  0%,100%  { transform: translateX(0); }
+  10%,30%,50%,70%,90% { transform: translateX(-4px); }
+  20%,40%,60%,80%     { transform: translateX(4px); }
+}
+@keyframes pour {
+  0%   { height: 0; }
+  100% { height: var(--pour-h, 60%); }
+}
+@keyframes slideIn {
+  0%   { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0);    opacity: 1; }
+}
+@keyframes slideOut {
+  0%   { transform: translateX(0);     opacity: 1; }
+  100% { transform: translateX(-100%); opacity: 0; }
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.05); }
+}
+@keyframes sparkle {
+  0%,100% { opacity: 0; transform: scale(0); }
+  50%     { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeIn {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  0%   { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+@keyframes popIn {
+  0%   { transform: scale(0); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 5px rgba(255,200,50,0.3); }
+  50%     { box-shadow: 0 0 20px rgba(255,200,50,0.6); }
+}
+@keyframes customerWalk {
+  0%   { transform: translateX(80px); opacity: 0; }
+  100% { transform: translateX(0);    opacity: 1; }
+}
+@keyframes customerLeave {
+  0%   { transform: translateX(0);      opacity: 1; }
+  100% { transform: translateX(-80px); opacity: 0; }
+}
+@keyframes bubbleFloat {
+  0%   { transform: translateY(0);     opacity: 0.7; }
+  100% { transform: translateY(-30px); opacity: 0; }
+}
+@keyframes shakerShake {
+  0%,100% { transform: rotate(0deg); }
+  25%     { transform: rotate(15deg); }
+  75%     { transform: rotate(-15deg); }
+}
+@keyframes iceDrop {
+  0%   { transform: translateY(-40px); opacity: 0; }
+  60%  { transform: translateY(5px);   opacity: 1; }
+  100% { transform: translateY(0);     opacity: 1; }
+}
+@keyframes serveSlide {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(var(--serve-x, 80px)); opacity: 0; }
+}
+@keyframes timerPulse {
+  0%,100% { color: #ef4444; transform: scale(1); }
+  50%     { color: #ff0000; transform: scale(1.2); }
+}
+@keyframes coinFly {
+  0%   { transform: translateY(0) scale(1);    opacity: 1; }
+  100% { transform: translateY(-60px) scale(0.3); opacity: 0; }
+}
+@keyframes starBurst {
+  0%   { transform: scale(0) rotate(0deg);   opacity: 1; }
+  100% { transform: scale(2) rotate(180deg); opacity: 0; }
+}
+@keyframes neonFlicker {
+  0%,19%,21%,23%,25%,54%,56%,100% {
+    text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
+                 0 0 42px #ff6ec7, 0 0 82px #ff6ec7;
+  }
+  20%,24%,55% { text-shadow: none; }
+}
+@keyframes progressFill {
+  0%   { width: 100%; }
+  100% { width: 0%; }
+}
+@keyframes bgShift {
+  0%   { background-position: 0% 0%; }
+  25%  { background-position: 100% 50%; }
+  50%  { background-position: 50% 100%; }
+  75%  { background-position: 0% 50%; }
+  100% { background-position: 0% 0%; }
+}
+@keyframes orbs {
+  0%   { transform: translate(0,0); }
+  25%  { transform: translate(30px,-30px); }
+  50%  { transform: translate(-20px,40px); }
+  75%  { transform: translate(50px,20px); }
+  100% { transform: translate(0,0); }
+}
+@keyframes waves {
+  0%   { transform: translateX(0) skewY(0); }
+  50%  { transform: translateX(-20px) skewY(2deg); }
+  100% { transform: translateX(0) skewY(0); }
+}
+@keyframes charBob {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-3px); }
+}
+@keyframes twinkle {
+  0%,100% { opacity: 0.3; }
+  50%     { opacity: 1; }
+}
+@keyframes glow {
+  0%,100% { filter: drop-shadow(0 0 5px rgba(255,110,199,0.5)); }
+  50%     { filter: drop-shadow(0 0 15px rgba(255,110,199,0.8)); }
+}
+@keyframes floatDrink {
+  0%   { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-100vh) rotate(360deg) scale(0.3); opacity: 0; }
+}
+
+/* ===== ANIMATION CLASSES ===== */
+.anim-float-up       { animation: floatUp 1s ease-out forwards; }
+.anim-shake          { animation: shake 0.5s ease-in-out; }
+.anim-slide-in       { animation: slideIn 0.4s ease-out forwards; }
+.anim-slide-out      { animation: slideOut 0.3s ease-in forwards; }
+.anim-bounce         { animation: bounce 0.6s ease-in-out; }
+.anim-pulse          { animation: pulse 1.5s ease-in-out infinite; }
+.anim-fade-in        { animation: fadeIn 0.5s ease-out forwards; }
+.anim-pop-in         { animation: popIn 0.3s ease-out forwards; }
+.anim-customer-walk  { animation: customerWalk 0.5s ease-out forwards; }
+.anim-customer-leave { animation: customerLeave 0.4s ease-in forwards; }
+.anim-shaker         { animation: shakerShake 0.3s ease-in-out 3; }
+.anim-serve          { animation: serveSlide 0.5s ease-in forwards; }
+.anim-coin           { animation: coinFly 0.8s ease-out forwards; }
+.anim-star           { animation: starBurst 0.6s ease-out forwards; }
+.anim-bg-shift       { animation: bgShift 8s ease-in-out infinite; }
+.anim-char-bob       { animation: charBob 1.2s ease-in-out infinite; }
+.anim-twinkle        { animation: twinkle 3s ease-in-out infinite; }
+.anim-glow           { animation: glow 2s ease-in-out infinite; }
+.anim-waves          { animation: waves 2s ease-in-out infinite; }
+.anim-drink-float    { animation: floatDrink 8s ease-in infinite; }
+
+/* ===== SCREENS ===== */
+.screen { position: absolute; inset: 0; display: none; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ===== BAR ===== */
+.bar-counter {
+  background: linear-gradient(180deg,#5D3A1A 0%,#8B5E3C 3%,#6B4226 6%,#4A2C0F 100%);
+  border-top: 3px solid #8B6914;
+}
+
+/* ===== GLASS ===== */
+.glass-container { position: relative; width: 52px; height: 72px; }
+.glass-body {
+  position: absolute; bottom: 0; width: 100%; height: 85%;
+  background: rgba(200,220,255,0.15);
+  border: 2px solid rgba(200,220,255,0.4);
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+  backdrop-filter: blur(2px);
+}
+.glass-liquid {
+  position: absolute; bottom: 0; width: 100%;
+  transition: height 0.5s ease, background 0.3s ease;
+  border-radius: 0 0 4px 4px;
+}
+.glass-stem {
+  position: absolute; bottom: -8px; left: 50%;
+  transform: translateX(-50%);
+  width: 4px; height: 12px;
+  background: rgba(200,220,255,0.3);
+}
+.glass-base {
+  position: absolute; bottom: -12px; left: 50%;
+  transform: translateX(-50%);
+  width: 24px; height: 4px;
+  background: rgba(200,220,255,0.3);
+  border-radius: 2px;
+}
+
+/* ===== BOTTLES ===== */
+.bottle {
+  cursor: pointer;
+  transition: transform 0.15s;
+  position: relative;
+  user-select: none; -webkit-user-select: none;
+  flex-shrink: 0;
+}
+.bottle:active  { transform: scale(0.90); }
+.bottle:hover   { transform: scale(1.08); }
+.bottle-body {
+  width: 36px; height: 60px;
+  border-radius: 4px 4px 6px 6px;
+  position: relative; overflow: hidden;
+  border: 1.5px solid rgba(255,255,255,0.2);
+}
+.bottle-neck {
+  width: 14px; height: 16px;
+  margin: 0 auto -2px;
+  border-radius: 3px 3px 0 0;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-bottom: none;
+}
+.bottle-cap { width: 18px; height: 6px; margin: 0 auto; border-radius: 2px 2px 0 0; }
+.bottle-label {
+  position: absolute; bottom: 6px; left: 3px; right: 3px;
+  text-align: center; font-size: 7px; font-weight: 600;
+  color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); line-height: 1.1;
+}
+
+/* ===== CUSTOMER ===== */
+.customer-avatar { width: 70px; height: 88px; position: relative; }
+
+/* ===== PATIENCE BAR ===== */
+.patience-bar { height: 6px; border-radius: 3px; overflow: hidden; background: rgba(0,0,0,0.2); }
+.patience-fill { height: 100%; border-radius: 3px; transition: width 0.5s linear, background 0.3s; }
+
+/* ===== SCORE POPUP ===== */
+.score-popup {
+  position: absolute; pointer-events: none;
+  font-weight: 700; font-size: 18px;
+  color: #FFD700; text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* ===== MENU BUTTONS ===== */
+.menu-btn { position: relative; overflow: hidden; transition: all 0.2s; }
+.menu-btn::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg,rgba(255,255,255,0.15) 0%,transparent 50%);
+  border-radius: inherit; pointer-events: none;
+}
+.menu-btn:active { transform: scale(0.96); }
+
+/* ===== NEON ===== */
+.neon-text {
+  text-shadow: 0 0 7px rgba(255,110,199,0.5),
+               0 0 10px rgba(255,110,199,0.3),
+               0 0 21px rgba(255,110,199,0.2);
+}
+
+/* ===== ICE ===== */
+.ice-cube {
+  width: 10px; height: 10px;
+  background: rgba(200,230,255,0.5);
+  border: 1px solid rgba(200,230,255,0.7);
+  border-radius: 2px; position: absolute;
+}
+
+/* ===== BUBBLE ===== */
+.bubble {
+  width: 4px; height: 4px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 50%; position: absolute;
+  animation: bubbleFloat 1.5s ease-out infinite;
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed; top: 16px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999; padding: 10px 20px;
+  border-radius: 12px; font-weight: 600;
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.3s; white-space: nowrap;
+  max-width: 90vw; text-align: center;
+}
+.toast.show { opacity: 1; }
+
+/* ===== ORDER BUBBLE ===== */
+.order-bubble {
+  background: rgba(255,255,255,0.95);
+  border-radius: 12px; padding: 6px 10px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.order-bubble::after {
+  content: ''; position: absolute; bottom: -7px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid rgba(255,255,255,0.95);
+}
+
+/* ===== SHELVES ===== */
+.ingredient-shelf {
+  background: linear-gradient(180deg,#3D2410 0%,#5D3A1A 100%);
+  border-top: 2px solid #8B6914;
+  border-bottom: 2px solid #2A1808;
+}
+
+/* ===== RECIPE CARD ===== */
+.recipe-card {
+  background: linear-gradient(135deg,#FFF8E7,#FFF0D0);
+  border: 2px solid #D4A853;
+  border-radius: 12px; padding: 12px;
+  position: relative; overflow: hidden;
+}
+.recipe-card::before {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 30px; height: 30px;
+  background: linear-gradient(135deg,transparent 50%,#D4A853 50%);
+  border-radius: 0 0 0 12px;
+}
+
+/* ===== HOW TO PLAY ===== */
+.step-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px; padding: 14px;
+  transition: transform 0.2s;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+
+/* ===== LEVEL BADGE ===== */
+.level-badge {
+  background: linear-gradient(135deg,#FFD700,#FFA500);
+  border: 2px solid #B8860B; border-radius: 50%;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: #4A2C0F; font-size: 15px;
+  box-shadow: 0 2px 8px rgba(255,165,0,0.4);
+}
+
+/* ===== GAME LAYOUT ===== */
+#gameScreen {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+}
+#gameScreen.active { display: flex; }
+
+#customerArea {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.ingredient-shelf-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.ingredient-shelf-scroll::-webkit-scrollbar { display: none; }
+
+#ingredientShelf {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 6px 8px;
+  justify-content: flex-start;
+  min-width: max-content;
+}
+
+/* Center when bottles fit */
+@media (min-width: 480px) {
+  #ingredientShelf {
+    justify-content: center;
+    min-width: unset;
+    flex-wrap: wrap;
+  }
+  .ingredient-shelf-scroll { overflow-x: visible; }
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .glass-container { width: 42px; height: 58px; }
+  .bottle-body     { width: 30px; height: 50px; }
+  .bottle-neck     { width: 12px; height: 13px; }
+  .bottle-cap      { width: 15px; height: 5px; }
+  .bottle-label    { font-size: 6px; }
+  .customer-avatar { width: 56px; height: 70px; }
+  .order-bubble    { padding: 4px 8px; }
+  .order-bubble p  { font-size: 10px; }
+}
+
+@media (max-width: 360px) {
+  .glass-container { width: 38px; height: 52px; }
+  .bottle-body     { width: 26px; height: 44px; }
+  .bottle-label    { font-size: 5px; }
+  .customer-avatar { width: 48px; height: 60px; }
+}
+
+/* ===== UTILITY ===== */
+.flex        { display: flex; }
+.flex-col    { flex-direction: column; }
+.flex-1      { flex: 1; }
+.items-center { align-items: center; }
+.items-end   { align-items: flex-end; }
+.items-start { align-items: flex-start; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-1  { gap: 4px; }
+.gap-2  { gap: 8px; }
+.gap-3  { gap: 12px; }
+.gap-4  { gap: 16px; }
+.gap-6  { gap: 24px; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.p-1    { padding: 4px; }
+.p-2    { padding: 8px; }
+.p-3    { padding: 12px; }
+.p-4    { padding: 16px; }
+.px-2   { padding-left: 8px; padding-right: 8px; }
+.px-3   { padding-left: 12px; padding-right: 12px; }
+.px-4   { padding-left: 16px; padding-right: 16px; }
+.px-8   { padding-left: 32px; padding-right: 32px; }
+.py-1   { padding-top: 4px; padding-bottom: 4px; }
+.py-1\.5 { padding-top: 6px; padding-bottom: 6px; }
+.py-2   { padding-top: 8px; padding-bottom: 8px; }
+.py-3   { padding-top: 12px; padding-bottom: 12px; }
+.py-3\.5{ padding-top: 14px; padding-bottom: 14px; }
+.py-4   { padding-top: 16px; padding-bottom: 16px; }
+.py-8   { padding-top: 32px; padding-bottom: 32px; }
+.mb-1   { margin-bottom: 4px; }
+.mb-2   { margin-bottom: 8px; }
+.mb-3   { margin-bottom: 12px; }
+.mb-4   { margin-bottom: 16px; }
+.mb-6   { margin-bottom: 24px; }
+.mr-3   { margin-right: 12px; }
+.mt-1   { margin-top: 4px; }
+.mt-2   { margin-top: 8px; }
+.my-4   { margin-top: 16px; margin-bottom: 16px; }
+.text-xs   { font-size: 12px; line-height: 1.4; }
+.text-sm   { font-size: 14px; line-height: 1.4; }
+.text-base { font-size: 16px; }
+.text-lg   { font-size: 18px; }
+.text-xl   { font-size: 20px; }
+.text-2xl  { font-size: 24px; }
+.text-3xl  { font-size: 30px; }
+.text-4xl  { font-size: 36px; }
+.text-5xl  { font-size: 48px; }
+.text-6xl  { font-size: 60px; }
+.font-semibold { font-weight: 600; }
+.font-bold     { font-weight: 700; }
+.text-white    { color: #fff; }
+.text-center   { text-align: center; }
+.opacity-70    { opacity: 0.7; }
+.opacity-80    { opacity: 0.8; }
+.opacity-30    { opacity: 0.3; }
+.rounded-sm    { border-radius: 4px; }
+.rounded-lg    { border-radius: 8px; }
+.rounded-xl    { border-radius: 12px; }
+.rounded-full  { border-radius: 9999px; }
+.rounded-2xl   { border-radius: 16px; }
+.overflow-auto   { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed    { position: fixed; }
+.inset-0  { top: 0; right: 0; bottom: 0; left: 0; }
+.top-0    { top: 0; }
+.left-0   { left: 0; }
+.right-0  { right: 0; }
+.bottom-0 { bottom: 0; }
+.w-5    { width: 20px; }
+.w-6    { width: 24px; }
+.w-8    { width: 32px; }
+.w-10   { width: 40px; }
+.h-5    { height: 20px; }
+.h-9    { height: 36px; }
+.h-10   { height: 40px; }
+.h-11   { height: 44px; }
+.h-12   { height: 48px; }
+.h-16   { height: 64px; }
+.h-full { height: 100%; }
+.max-w-xs { max-width: 320px; }
+.max-w-sm { max-width: 384px; }
+.flex-shrink-0 { flex-shrink: 0; }
+.flex-wrap  { flex-wrap: wrap; }
+.space-y-3 > * + * { margin-top: 12px; }
+.cursor-pointer { cursor: pointer; }
+.pointer-events-none { pointer-events: none; }
+.z-50   { z-index: 50; }
+.border-none { border: none; }
+.inline-block { display: inline-block; }
+.inline-flex  { display: inline-flex; }
+.block        { display: block; }
+.disabled\:opacity-40:disabled { opacity: 0.4; }
+.backdrop-blur-sm { backdrop-filter: blur(4px); }
