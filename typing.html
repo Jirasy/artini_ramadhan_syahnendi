@@ -3,42 +3,84 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Typing Indonesia</title>
-    <link rel="stylesheet" href="typing.css" 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f0f4f8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Typing Game Indonesia</title>
+    <link rel="stylesheet" href="typing.css">
 </head>
 
 <body>
 
-    <!-- TAMPILAN MENU -->
-    <div id="menu" class="container">
-        <h1>Typing Game</h1>
-        <p>Pilih tingkat kesulitan:</p>
-        <button class="level-btn easy" onclick="startGame('easy')">Mudah (Kata Pendek)</button>
-        <button class="level-btn medium" onclick="startGame('medium')">Sedang (Kata Agregat)</button>
-        <button class="level-btn hard" onclick="startGame('hard')">Sulit (Kalimat Panjang)</button>
+    <!-- ===== LAYAR MENU ===== -->
+    <div id="menu" class="screen active">
+        <h1>⌨️ Typing Game</h1>
+        <p class="subtitle">Pilih tingkat kesulitan:</p>
+
+        <button class="level-btn easy" onclick="startGame('easy')">
+            🟢 Mudah &mdash; Kata Pendek
+        </button>
+        <button class="level-btn medium" onclick="startGame('medium')">
+            🟡 Sedang &mdash; Kata Sedang
+        </button>
+        <button class="level-btn hard" onclick="startGame('hard')">
+            🔴 Sulit &mdash; Kata Panjang
+        </button>
     </div>
 
-    <!-- TAMPILAN GAME -->
-    <div id="game" class="container hidden">
+    <!-- ===== LAYAR GAME ===== -->
+    <div id="game" class="screen">
+
+        <!-- Statistik atas -->
         <div class="info-bar">
-            <div>Waktu: <span id="time">60</span>d</div>
-            <div>Skor: <span id="score">0</span></div>
+            <div class="stat-card">
+                <div class="stat-label">Waktu</div>
+                <div class="stat-val" id="time">60</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Skor</div>
+                <div class="stat-val" id="score">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Streak</div>
+                <div class="stat-val" id="streak">0</div>
+            </div>
         </div>
 
-        <div class="word-display" id="current-word">Halo</div>
+        <!-- Timer bar -->
+        <div id="timer-bar-wrap">
+            <div id="timer-bar"></div>
+        </div>
 
-        <input type="text" id="word-input" placeholder="Ketik di sini..." autocomplete="off" autofocus>
+        <!-- Kata yang harus diketik -->
+        <div class="word-display" id="current-word">—</div>
 
+        <!-- Input ketik -->
+        <input
+            type="text"
+            id="word-input"
+            placeholder="Ketik di sini..."
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+        >
+
+        <!-- Pesan feedback -->
         <div class="message" id="message"></div>
+
     </div>
 
-    <!-- TAMPILAN GAME OVER -->
-    <div id="game-over" class="container hidden">
+    <!-- ===== LAYAR GAME OVER ===== -->
+    <div id="game-over" class="screen">
         <h1>Waktu Habis!</h1>
-        <p>Skor akhir kamu:</p>
-        <h2 id="final-score">0</h2>
-        <button class="level-btn" onclick="showMenu()">Main Lagi</button>
+        <div class="final-label">Skor akhir kamu</div>
+        <div class="final-score-big" id="final-score">0</div>
+        <div class="result-detail" id="result-detail"></div>
+        <div class="divider"></div>
+        <button class="back-btn" onclick="showMenu()">↩ Main Lagi</button>
     </div>
 
     <script src="typing.js"></script>
