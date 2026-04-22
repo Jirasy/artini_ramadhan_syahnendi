@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="snake.css">
+    <title>🐍 Snake Game Ultimate</title>
+</head>
+
+<body>
+
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- MAIN MENU -->
+        <div id="main-menu" class="overlay">
+            <div class="menu-title">🐍 Snake Game</div>
+            <div class="menu-subtitle">Pilih warna & mode favoritmu!</div>
+
+            <div class="menu-section">
+                <div class="section-title">Warna Ular</div>
+                <div class="color-options">
+                    <div class="color-btn rainbow active" data-color="rainbow" title="Rainbow (Warna Warni)"></div>
+                    <div class="color-btn" data-color="#4dabf7" style="background:#4dabf7" title="Biru"></div>
+                    <div class="color-btn" data-color="#69db7c" style="background:#69db7c" title="Hijau"></div>
+                    <div class="color-btn" data-color="#ffd43b" style="background:#ffd43b" title="Kuning"></div>
+                    <div class="color-btn" data-color="#da77f2" style="background:#da77f2" title="Ungu"></div>
+                    <div class="color-btn" data-color="#f783ac" style="background:#f783ac" title="Pink"></div>
+                    <div class="color-btn" data-color="#ff6b6b" style="background:#ff6b6b" title="Merah"></div>
+                    <div class="color-btn" data-color="#ffffff" style="background:#ffffff" title="Putih"></div>
+                    <div class="color-btn custom" data-color="custom" title="Custom Color">🎨</div>
+                </div>
+                <input type="color" id="custom-color-input" value="#4CAF50" style="display:none">
+            </div>
+
+            <div class="menu-section">
+                <div class="section-title">Mode Permainan</div>
+                <div class="mode-options">
+                    <div class="mode-btn" data-speed="200">
+                        <span class="mode-icon">🌱</span><span>Mudah</span><span class="mode-info">Lambat</span>
+                    </div>
+                    <div class="mode-btn active" data-speed="120">
+                        <span class="mode-icon">⚡</span><span>Normal</span><span class="mode-info">Sedang</span>
+                    </div>
+                    <div class="mode-btn" data-speed="70">
+                        <span class="mode-icon">🔥</span><span>Sulit</span><span class="mode-info">Cepat</span>
+                    </div>
+                    <div class="mode-btn" data-speed="endless">
+                        <span class="mode-icon">♾️</span><span>Endless</span><span class="mode-info">Makin Cepat</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="startGame()">🚀 Mulai Main</button>
+        </div>
+
+        <!-- GAME OVER -->
+        <div id="game-over" class="overlay hidden">
+            <div class="game-over-title">💀 Game Over</div>
+            <div class="score-label">Skor Akhir</div>
+            <div class="score-display" id="final-score">0</div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="final-length">1</div>
+                    <div class="stat-label">Panjang Ular</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="final-food">0</div>
+                    <div class="stat-label">Makanan Dimakan</div>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="startGame()">🔄 Main Lagi</button>
+            <button class="btn-secondary" onclick="showMainMenu()">🏠 Menu Utama</button>
+        </div>
+    </div>
+
+    <div id="hud" class="hidden">
+        <div class="hud-item"><span class="hud-icon">⭐</span><span id="score">0</span></div>
+        <div class="hud-item"><span class="hud-icon">📏</span><span id="length">1</span></div>
+    </div>
+
+    <div id="mobile-controls">
+        <button class="control-btn" id="btn-up" ontouchstart="changeDirection('UP')">▲</button>
+        <button class="control-btn" id="btn-left" ontouchstart="changeDirection('LEFT')">◀</button>
+        <button class="control-btn" id="btn-down" ontouchstart="changeDirection('DOWN')">▼</button>
+        <button class="control-btn" id="btn-right" ontouchstart="changeDirection('RIGHT')">▶</button>
+    </div>
+
+    <script src="snake.js"></script>
+</body>
+
+</html>

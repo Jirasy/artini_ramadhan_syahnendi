@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Typing Indonesia</title>
+    <link rel="stylesheet" href="typing.css" </head>
+
+<body>
+
+    <!-- TAMPILAN MENU -->
+    <div id="menu" class="container">
+        <h1>Typing Game</h1>
+        <p>Pilih tingkat kesulitan:</p>
+        <button class="level-btn easy" onclick="startGame(" easy")">Mudah (Kata Pendek)</button>
+        <button class="level-btn medium" onclick="startGame(" medium")">Sedang (Kata Agregat)</button>
+        <button class="level-btn hard" onclick="startGame(" hard")">Sulit (Kalimat Panjang)</button>
+    </div>
+
+    <!-- TAMPILAN GAME -->
+    <div id="game" class="container hidden">
+        <div class="info-bar">
+            <div>Waktu: <span id="time">60</span>d</div>
+            <div>Skor: <span id="score">0</span></div>
+        </div>
+
+        <div class="word-display" id="current-word">Halo</div>
+
+        <input type="text" id="word-input" placeholder="Ketik di sini..." autocomplete="off" autofocus>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <!-- TAMPILAN GAME OVER -->
+    <div id="game-over" class="container hidden">
+        <h1>Waktu Habis!</h1>
+        <p>Skor akhir kamu:</p>
+        <h2 id="final-score">0</h2>
+        <button class="level-btn" onclick="showMenu()">Main Lagi</button>
+    </div>
+
+    <script src="typing.js"></script>
+</body>
+
+</html>

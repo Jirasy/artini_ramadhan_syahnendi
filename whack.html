@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Whack-a-Mole</title>
+  <link rel="stylesheet" href="whack.css">
+</head>
+<body>
+  <h1>Whack-a-Mole</h1>
+  <p>Ketuk/klik mole secepat mungkin!</p>
+  
+  <div id="score">Score: 0</div>
+  <div id="timer">Time: 30</div>
+  
+  <div id="controls">
+    <label for="difficulty">Difficulty: </label>
+    <select id="difficulty">
+      <option value="1200">Easy</option>
+      <option value="800" selected>Medium</option>
+      <option value="500">Hard</option>
+    </select>
+    <button id="startBtn">Start / Restart</button>
+  </div>
+  
+  <div id="game-board"></div>
+  
+  <p id="status"></p>
+  
+  <script src="whack.js"></script>
+</body>
+</html>

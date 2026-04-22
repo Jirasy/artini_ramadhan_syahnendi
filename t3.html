@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="t3.css">
+    <link rel="stylesheet" href="t3t.css">
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="appWrapper">
+   <div class="content-layer" style="min-height:100%; display:flex; flex-direction:column;">
+    <div class="toast-container" id="toastContainer"></div><!-- MENU SCREEN -->
+    <div id="menuScreen" class="screen" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; gap:20px; max-width:480px; margin:0 auto; width:100%;">
+     <header style="text-align:center; margin-bottom:4px;">
+      <h1 class="game-title" id="titleText" style="font-size:36px; margin-bottom:4px;">Tic Tac Toe</h1>
+      <p style="color:rgba(241,245,249,0.5); font-size:14px;">Pilih pengaturan &amp; mulai bermain!</p>
+     </header><!-- Opponent -->
+     <div class="menu-card" style="width:100%;">
+      <div class="section-label">
+       Lawan
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;"><button class="option-btn selected" data-group="opponent" data-value="bot" onclick="selectOption(this)"> <i data-lucide="cpu" style="width:18px;height:18px;"></i> vs Bot </button> <button class="option-btn" data-group="opponent" data-value="friend" onclick="selectOption(this)"> <i data-lucide="users" style="width:18px;height:18px;"></i> vs Teman </button>
+      </div>
+     </div><!-- Difficulty -->
+     <div class="menu-card" id="difficultyCard" style="width:100%;">
+      <div class="section-label">
+       Level Bot
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;"><button class="option-btn selected" data-group="difficulty" data-value="easy" onclick="selectOption(this)">Mudah</button> <button class="option-btn" data-group="difficulty" data-value="medium" onclick="selectOption(this)">Sedang</button> <button class="option-btn" data-group="difficulty" data-value="hard" onclick="selectOption(this)">Sulit</button>
+      </div>
+     </div><!-- Board Size -->
+     <div class="menu-card" style="width:100%;">
+      <div class="section-label">
+       Ukuran Papan
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;"><button class="option-btn selected" data-group="size" data-value="3" onclick="selectOption(this)">3×3</button> <button class="option-btn" data-group="size" data-value="4" onclick="selectOption(this)">4×4</button> <button class="option-btn" data-group="size" data-value="5" onclick="selectOption(this)">5×5</button>
+      </div>
+     </div><!-- Symbol -->
+     <div class="menu-card" style="width:100%;">
+      <div class="section-label">
+       Simbol Kamu
+      </div>
+      <div style="display:flex; gap:10px; justify-content:center;"><button class="option-btn symbol-select selected" data-group="symbol" data-value="X" onclick="selectOption(this)"> <span style="color:var(--primary-color);">✕</span> </button> <button class="option-btn symbol-select" data-group="symbol" data-value="O" onclick="selectOption(this)"> <span style="color:var(--secondary-color);">○</span> </button>
+      </div>
+     </div><!-- First Turn -->
+     <div class="menu-card" style="width:100%;">
+      <div class="section-label">
+       Giliran Pertama
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;"><button class="option-btn selected" data-group="first" data-value="X" onclick="selectOption(this)">✕ duluan</button> <button class="option-btn" data-group="first" data-value="O" onclick="selectOption(this)">○ duluan</button>
+      </div>
+     </div><button class="play-btn" onclick="startGame()" style="width:100%; margin-top:4px;"> MAIN! 🎮 </button>
+    </div><!-- GAME SCREEN -->
+    <div id="gameScreen" class="screen" style="flex:1; display:none; flex-direction:column; align-items:center; padding:16px; gap:14px; max-width:500px; margin:0 auto; width:100%;"><!-- Top Bar -->
+     <nav style="display:flex; width:100%; justify-content:space-between; align-items:center;" aria-label="Game controls"><button class="back-btn" onclick="goToMenu()"> <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Menu </button>
+      <h2 class="game-title" id="gameTitle" style="font-size:22px;">Tic Tac Toe</h2><button class="reset-btn" onclick="resetGame()"> <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i> Ulang </button>
+     </nav><!-- Score -->
+     <div style="display:flex; gap:12px; width:100%; justify-content:center;">
+      <div class="score-card" id="scoreX">
+       <div style="font-size:12px; opacity:0.5;" id="labelX">
+        Player X
+       </div>
+       <div style="font-size:24px; font-family:'Fredoka'; font-weight:700; color:var(--primary-color);" id="scoreXVal">
+        0
+       </div>
+      </div>
+      <div class="score-card" id="scoreDraw">
+       <div style="font-size:12px; opacity:0.5;">
+        Seri
+       </div>
+       <div style="font-size:24px; font-family:'Fredoka'; font-weight:700; opacity:0.6;" id="scoreDrawVal">
+        0
+       </div>
+      </div>
+      <div class="score-card" id="scoreO">
+       <div style="font-size:12px; opacity:0.5;" id="labelO">
+        Player O
+       </div>
+       <div style="font-size:24px; font-family:'Fredoka'; font-weight:700; color:var(--secondary-color);" id="scoreOVal">
+        0
+       </div>
+      </div>
+     </div><!-- Status -->
+     <div class="status-bar" id="statusBar" style="width:100%;">
+      Giliran: ✕
+     </div><!-- Board -->
+     <main id="boardContainer" style="width:100%; max-width:400px;" role="grid" aria-label="Game board"></main><!-- New Round --> <button class="play-btn" id="newRoundBtn" style="display:none; width:100%; font-size:16px; padding:14px;" onclick="resetGame()"> Ronde Baru 🔄 </button>
+    </div>
+   </div>
+  </div>
+  <script src="t3.js"></script>
+ <script src="t3t.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+body {
+  background: #111;
+  color: #fff;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+canvas {
+  background: #000;
+  border: 2px solid #fff;
+  display: block;
+  margin: 0 auto;
+}
+
+.controls {
+  margin-top: 15px;
+}
+
+.controls button {
+  font-size: 30px;
+  padding: 20px 30px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  background: #0f0;
+  cursor: pointer;
+}
+.controls button:active {
+  background: #ff0;
+}

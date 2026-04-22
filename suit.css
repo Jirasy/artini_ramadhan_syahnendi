@@ -1,0 +1,198 @@
+* {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            transition: background 2s ease-in-out;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Dynamic Background based on time */
+        .sky-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transition: background 2s ease-in-out;
+        }
+
+        /* Sky gradients for different times */
+        .night { background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2a2050 100%); }
+        .early-morning { background: linear-gradient(135deg, #2d1b4e 0%, #3d2d5f 50%, #5d3d7f 100%); }
+        .morning { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 50%, #ffa500 100%); }
+        .noon { background: linear-gradient(135deg, #87ceeb 0%, #add8e6 50%, #b0e0e6 100%); }
+        .afternoon { background: linear-gradient(135deg, #87ceeb 0%, #ffa500 50%, #ff8c42 100%); }
+        .evening { background: linear-gradient(135deg, #ff6b35 0%, #ff4500 50%, #8b4513 100%); }
+        .dusk { background: linear-gradient(135deg, #4a1035 0%, #8b3a62 50%, #d9534f 100%); }
+
+        /* Animated stars */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+            @keyframes skyAnimation {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.1); }
+            100% { filter: brightness(1); }
+        }
+
+        .noon {
+        background: linear-gradient(135deg, #87ceeb, #add8e6);
+        animation: skyAnimation 10s ease-in-out infinite;
+        } 
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Main container */
+        .game-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Card animations */
+        .choice-card {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: center;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-12px) scale(1.05);
+        }
+
+        .choice-card.selected {
+            animation: pulse-selected 0.6s ease-out;
+        }
+
+        @keyframes pulse-selected {
+            0% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px currentColor);
+            }
+            50% { 
+                transform: scale(1.15);
+            }
+            100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px currentColor);
+            }
+        }
+
+        /* Result animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-container {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        /* Score display animation */
+        @keyframes scoreFlip {
+            0% { transform: rotateX(0); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0); }
+        }
+
+        .score-update {
+            animation: scoreFlip 0.5s ease-out;
+        }
+
+        /* Button animations */
+        .btn-action {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .btn-action:hover::before {
+            left: 100%;
+        }
+
+        /* Time display */
+        .time-display {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive grid */
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .choices-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .game-title {
+                font-size: 1.875rem !important;
+            }
+            
+            .choice-card {
+                padding: 1rem !important;
+            }
+
+            .vs-text {
+                font-size: 0.875rem !important;
+            }
+        }
+
+        /* Glassmorphism effect */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+        }
+
+        /* Text contrast adjustment */
+        .text-light { color: rgba(255, 255, 255, 0.9); }
+        .text-shadow { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); }
+
+        /* HSL = Hue (0-360), Saturation (0-100%), Lightness (0-100%) */
+        .night { background: hsl(260, 30%, 15%); }
+        .morning { background: hsl(15, 95%, 65%); }
+        .noon { background: hsl(200, 100%, 75%); }

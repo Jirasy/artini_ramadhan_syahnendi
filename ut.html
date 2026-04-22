@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ular Tangga</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ut.css">
+    <link rel="stylesheet" href="ut2.css">
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full overflow-auto"><!-- SETUP SCREEN -->
+   <div id="setupScreen" class="min-h-full flex items-center justify-center p-4">
+    <div class="w-full max-w-lg slide-up">
+     <div class="text-center mb-8">
+      <div class="text-6xl mb-3">
+       🐍🎲
+      </div>
+      <h1 id="gameTitle" class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-cyan-400 bg-clip-text text-transparent">Ular Tangga</h1>
+      <p class="text-slate-400 mt-3 text-sm md:text-base">Permainan papan klasik yang seru</p>
+     </div>
+     <div class="bg-slate-800/70 rounded-2xl p-6 border border-white/12 space-y-6"><!-- Game Mode -->
+      <div><label class="block text-sm font-semibold mb-3 text-slate-200">🎮 Mode Permainan</label>
+       <div class="grid grid-cols-2 gap-3"><button onclick="setMode('friends')" id="modeFriends" class="btn-secondary flex items-center justify-center gap-2 py-3 transition" style="background:rgba(250,204,21,.15);border-color:rgba(250,204,21,.4)"> <i data-lucide="users" style="width:18px;height:18px"></i> Vs Teman </button> <button onclick="setMode('bot')" id="modeBot" class="btn-secondary flex items-center justify-center gap-2 py-3 transition"> <i data-lucide="cpu" style="width:18px;height:18px"></i> Vs Bot </button>
+       </div>
+      </div><!-- Player Count -->
+      <div><label class="block text-sm font-semibold mb-3 text-slate-200">👥 Jumlah Pemain: <span id="playerCountLabel" class="text-yellow-400">2</span></label>
+       <div class="flex items-center gap-3"><input type="range" id="playerCountRange" min="1" max="6" value="2" oninput="updatePlayerCount(this.value)" class="flex-1 accent-yellow-400 h-2 rounded" style="appearance:slider-horizontal">
+        <span class="text-sm text-slate-400 font-mono" id="playerCountValue">2</span>
+       </div>
+      </div><!-- Players Setup -->
+      <div id="playersSetup" class="space-y-4 max-h-96 overflow-y-auto"></div><!-- Start --> <button onclick="startGame()" class="btn-primary w-full text-center text-lg py-4 mt-4 font-bold"> 🎲 Mulai Bermain! </button>
+     </div>
+    </div>
+   </div><!-- GAME SCREEN -->
+   <div id="gameScreen" class="hidden h-full flex flex-col"><!-- Top Bar -->
+    <div class="flex items-center justify-between p-3 md:p-4 bg-slate-800/90 border-b border-white/8 sticky top-0 z-50"><button onclick="backToSetup()" class="btn-secondary py-2 px-3 text-sm flex items-center gap-2"> <i data-lucide="arrow-left" style="width:16px;height:16px"></i> Menu </button>
+     <h2 id="gameTitleBar" class="font-bold text-base md:text-lg bg-gradient-to-r from-yellow-400 to-cyan-400 bg-clip-text text-transparent">Ular Tangga</h2><button onclick="showRules()" class="btn-secondary py-2 px-3 text-sm">❓ Aturan</button>
+    </div><!-- Game Layout -->
+    <div class="flex-1 overflow-auto p-2 md:p-4">
+     <div class="flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto h-full"><!-- Board -->
+      <div class="flex-1 flex items-center justify-center min-h-0">
+       <div id="boardContainer" class="relative w-full" style="max-width:600px">
+        <div id="board" class="grid grid-cols-10 aspect-square w-full rounded-xl overflow-hidden border-3 border-white/15 bg-slate-950" style="position:relative"></div>
+        <svg id="snakeLadderSvg" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:4" viewbox="0 0 100 100" preserveaspectratio="none"></svg>
+       </div>
+      </div><!-- Side Panel -->
+      <div class="lg:w-72 flex flex-col gap-4 min-h-0"><!-- Turn Indicator -->
+       <div id="turnIndicator" class="turn-indicator text-center font-semibold"></div><!-- Dice -->
+       <div class="flex flex-col items-center gap-4 bg-slate-800/40 rounded-xl p-4 border border-white/8">
+        <span class="text-sm text-slate-400 font-semibold">Nilai Dadu</span>
+        <div id="diceDisplay" class="dice-face cursor-pointer hover:shadow-lg transition-shadow" onclick="rollDice()" title="Klik untuk lempar dadu"></div>
+        <button id="rollBtn" onclick="rollDice()" class="btn-primary px-8 w-full">🎲 Lempar Dadu</button>
+       </div><!-- Scoreboard -->
+       <div class="scoreboard p-4 flex-1 min-h-0 overflow-auto">
+        <h3 class="text-xs font-bold text-slate-300 mb-3 uppercase tracking-wider">📊 Pemain</h3>
+        <div id="scoreboard" class="space-y-2"></div>
+       </div><!-- Game Log -->
+       <div class="bg-slate-800/40 rounded-xl p-4 border border-white/8 max-h-40 overflow-auto">
+        <h3 class="text-xs font-bold text-slate-300 mb-2 uppercase tracking-wider">📝 Log</h3>
+        <div id="gameLog" class="space-y-1.5 text-sm text-slate-300"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Rules Modal -->
+   <div id="rulesModal" class="modal-overlay hidden" onclick="if(event.target===this)closeRules()">
+    <div class="modal-content max-h-[85%] overflow-auto">
+     <div class="flex justify-between items-center mb-5">
+      <h2 class="text-2xl font-bold">📜 Aturan Permainan</h2><button onclick="closeRules()" class="text-slate-400 hover:text-white transition"><i data-lucide="x" style="width:24px;height:24px"></i></button>
+     </div>
+     <div class="space-y-4 text-sm md:text-base text-slate-300 leading-relaxed">
+      <p><strong class="text-yellow-400 text-base">🎯 Tujuan:</strong> Menjadi pemain pertama yang mencapai kotak 100.</p>
+      <p><strong class="text-yellow-400 text-base">🎲 Giliran:</strong> Setiap pemain melempar satu dadu (1-6) dan bergerak sesuai angka.</p>
+      <p><strong class="text-yellow-400 text-base">🚀 Mulai:</strong> Pemain harus melempar angka 6 untuk masuk papan dari posisi awal. Jika mendapat 6, lempar lagi.</p>
+      <p><strong class="text-yellow-400 text-base">6️⃣ Dadu 6:</strong> Jika mendapat angka 6, pemain mendapat giliran tambahan. Tiga kali 6 berturut-turut, giliran hangus.</p>
+      <p><strong class="text-yellow-400 text-base">🪜 Tangga:</strong> Jika berhenti di dasar tangga, naik ke puncak tangga.</p>
+      <p><strong class="text-yellow-400 text-base">🐍 Ular:</strong> Jika berhenti di kepala ular, turun ke ekor ular.</p>
+      <p><strong class="text-yellow-400 text-base">🏁 Menang:</strong> Harus mendarat tepat di kotak 100. Jika lemparan melebihi 100, pemain tetap di posisi semula (memantul kembali).</p>
+      <p><strong class="text-yellow-400 text-base">👥 Sama Kotak:</strong> Beberapa pemain boleh berada di kotak yang sama.</p>
+     </div>
+    </div>
+   </div><!-- Win Modal -->
+   <div id="winModal" class="modal-overlay hidden">
+    <div class="modal-content text-center bounce-in">
+     <div class="text-7xl mb-6">
+      🏆
+     </div>
+     <h2 id="winnerName" class="text-3xl font-bold mb-3"></h2>
+     <p class="text-slate-400 mb-8 text-lg">Selamat! Kamu menang! 🎉</p>
+     <div class="flex gap-3 justify-center flex-col md:flex-row"><button onclick="restartGame()" class="btn-primary flex-1">🔄 Main Lagi</button> <button onclick="backToSetup()" class="btn-secondary flex-1">🏠 Menu Utama</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="ut.js"></script>
+<!-- FOOTER -->
+<footer class="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/70 to-transparent py-1 px-2 text-center text-[10px] md:text-xs text-slate-600 z-10 pointer-events-none">
+  <p class="tracking-widest opacity-70">Designed & Developed by <span class="text-slate-400 font-medium">Jimny Al Ramadhan Syahnendi</span> | © 2026</p>
+</footer>
+
+</body>
+</html>

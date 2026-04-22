@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tetris</title>
+  <link rel="stylesheet" href="tetris.css">
+</head>
+<body>
+  <h1>Tetris Game</h1>
+  <canvas id="tetris" width="200" height="400"></canvas>
+
+  <div id="info">
+    <p id="score">Score: 0</p>
+    <p id="level">Level: 1</p>
+    <p>Next Piece:</p>
+    <canvas id="preview" width="80" height="80"></canvas>
+  </div>
+
+  <p>Controls: ⬅️ ➡️ ⬆️ ⬇️ | Z = rotate CCW | Space = hard drop</p>
+
+  <!-- Virtual Controls -->
+  <div class="controls">
+    <button onclick="playerMove(-1)">⬅️</button>
+    <button onclick="playerRotate(1)">⤴️</button>
+    <button onclick="playerMove(1)">➡️</button>
+    <button onclick="playerDrop()">⬇️</button>
+    <button onclick="playerRotate(-1)">⤵️</button>
+    <button onclick="hardDrop()">⏬</button>
+  </div>
+
+  <script src="tetris.js"></script>
+</body>
+</html>

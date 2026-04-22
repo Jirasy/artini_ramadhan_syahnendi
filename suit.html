@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚔️ Suit Master - Rock Paper Scissors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="suit.css">
+</head>
+<body>
+    <div class="sky-background"></div>
+    
+    <div class="game-container">
+        <div class="w-full max-w-2xl">
+            <!-- Header -->
+            <div class="text-center mb-8 md:mb-12">
+                <h1 class="game-title text-4xl md:text-5xl font-bold text-light text-shadow mb-2" style="font-family: 'Space Mono', monospace;">
+                    GAME SUIT LAWAN BOT
+                </h1>
+                <p class="text-light text-shadow text-opacity-80 text-sm md:text-base">Bermain Suit melawan AI • Live Match</p>
+                <div class="time-display text-light text-shadow mt-3 opacity-70">
+                    <span id="current-time">--:--</span> • <span id="current-greeting">Selamat datang</span>
+                </div>
+            </div>
+
+            <!-- Score Board -->
+            <div class="glass-panel p-6 md:p-8 mb-8 rounded-3xl">
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                        <p class="text-light text-opacity-70 text-xs md:text-sm font-medium mb-2 uppercase tracking-widest">Anda</p>
+                        <p id="player-score" class="text-3xl md:text-4xl font-bold text-light text-shadow score-update">0</p>
+                    </div>
+                    <div>
+                        <p class="text-light text-opacity-70 text-xs md:text-sm font-medium mb-2 uppercase tracking-widest">Status</p>
+                        <p id="game-status" class="text-lg md:text-2xl font-bold text-light text-shadow">Siap?</p>
+                    </div>
+                    <div>
+                        <p class="text-light text-opacity-70 text-xs md:text-sm font-medium mb-2 uppercase tracking-widest">AI</p>
+                        <p id="ai-score" class="text-3xl md:text-4xl font-bold text-light text-shadow score-update">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Area -->
+            <div class="glass-panel p-6 md:p-8 rounded-3xl mb-8">
+                <!-- Your Choice -->
+                <div class="mb-8">
+                    <p class="text-light text-shadow text-xs md:text-sm font-medium uppercase tracking-widest mb-4 opacity-70">Pilihan Anda</p>
+                    <div class="choices-grid" id="choices-container">
+                        <button class="choice-card choice-btn p-4 md:p-6 rounded-2xl glass-panel hover:border-yellow-300 transition-all" data-choice="rock">
+                            <span class="text-4xl md:text-5xl block mb-2">✊</span>
+                            <span class="text-light text-shadow text-xs md:text-sm font-medium">Batu</span>
+                        </button>
+                        <button class="choice-card choice-btn p-4 md:p-6 rounded-2xl glass-panel hover:border-yellow-300 transition-all" data-choice="paper">
+                            <span class="text-4xl md:text-5xl block mb-2">✋</span>
+                            <span class="text-light text-shadow text-xs md:text-sm font-medium">Kertas</span>
+                        </button>
+                        <button class="choice-card choice-btn p-4 md:p-6 rounded-2xl glass-panel hover:border-yellow-300 transition-all" data-choice="scissors">
+                            <span class="text-4xl md:text-5xl block mb-2">✌️</span>
+                            <span class="text-light text-shadow text-xs md:text-sm font-medium">Gunting</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Display -->
+                <div id="result-area" class="hidden">
+                    <div class="result-container bg-white bg-opacity-10 rounded-2xl p-6 md:p-8 text-center border border-white border-opacity-20">
+                        <p class="text-light text-shadow text-sm md:text-base font-medium uppercase tracking-widest mb-4 opacity-75">Hasil Pertandingan</p>
+                        
+                        <div class="grid grid-cols-3 gap-3 md:gap-6 mb-6">
+                            <!-- Player choice -->
+                            <div>
+                                <p class="text-2xl md:text-4xl mb-2" id="player-emoji">✊</p>
+                                <p class="text-light text-shadow text-xs md:text-sm opacity-70" id="player-choice-name">Batu</p>
+                            </div>
+                            
+                            <!-- VS -->
+                            <div class="flex items-center justify-center">
+                                <p class="vs-text text-xl md:text-2xl font-bold text-light text-shadow opacity-50">VS</p>
+                            </div>
+                            
+                            <!-- AI choice -->
+                            <div>
+                                <p class="text-2xl md:text-4xl mb-2" id="ai-emoji">✊</p>
+                                <p class="text-light text-shadow text-xs md:text-sm opacity-70" id="ai-choice-name">Batu</p>
+                            </div>
+                        </div>
+
+                        <p id="result-text" class="text-xl md:text-2xl font-bold text-light text-shadow mb-4">HASIL</p>
+                        
+                        <button id="play-again-btn" class="btn-action mt-4 px-8 py-3 bg-white bg-opacity-20 hover:bg-opacity-30 text-light text-shadow rounded-full font-semibold transition-all border border-white border-opacity-30">
+                            Main Lagi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center text-light text-shadow text-xs md:text-sm opacity-60">
+                <p>Dibuat oleh Ramadhan syahnendi </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="suit.js"></script>
+</body>
+</html>

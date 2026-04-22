@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tank Battle - Stickman Style</title>
+     <link rel="stylesheet" href="Tank.css">
+</head>
+<body>
+
+    <canvas id="gameCanvas"></canvas>
+    
+    <div id="hud">
+        Level: <span id="levelDisplay">1</span> | Score: <span id="scoreDisplay">0</span> | HP: <span id="hpDisplay">100</span>
+    </div>
+    <div id="auto-status">AUTO MODE ON</div>
+
+    <!-- Main Menu -->
+    <div id="mainMenu" class="ui-layer">
+        <h1>Tank Battle</h1>
+        <div class="menu-box">
+            <label for="tankColor">Pilih Warna Tank:</label>
+            <input type="color" id="tankColor" value="#ff4757">
+            
+            <label for="levelSelect">Pilih Level:</label>
+            <select id="levelSelect">
+                <option value="1">Level 1 (Mudah)</option>
+                <option value="2">Level 2 (Normal)</option>
+                <option value="3">Level 3 (Sulit)</option>
+                <option value="4">Level 4 (Hardcore)</option>
+            </select>
+            
+            <button onclick="startGame()">MULAI</button>
+            <p style="font-size: 0.8rem; margin-top: 15px;">
+                PC: WASD + Mouse Click<br>
+                HP: Touch Screen
+            </p>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" class="ui-layer hidden">
+        <h1>GAME OVER</h1>
+        <h2 id="finalScore">Score: 0</h2>
+        <button onclick="showMainMenu()">MENU UTAMA</button>
+    </div>
+
+    <script src="Tank.js"></script>
+</body>
+</html>
