@@ -1,162 +1,134 @@
 <!doctype html>
-<html lang="id" class="h-full">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
-  <meta name="description" content="Ular Tangga - Permainan papan klasik yang seru">
-  <meta name="theme-color" content="#0f172a">
-  <title>Ular Tangga 🐍🎲</title>
-  
-  <!-- External Libraries -->
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- CSS Files -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Ular Tangga</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="ut.css">
-  <link rel="stylesheet" href="mobile_ut.css">
 </head>
-<body class="h-full bg-slate-950 text-slate-100 overflow-hidden">
-  <div id="app" class="h-full flex flex-col">
-    
-    <!-- SETUP SCREEN -->
-    <div id="setupScreen" class="min-h-full flex items-center justify-center p-3 sm:p-4 bg-slate-950">
-      <div class="w-full max-w-lg slide-up">
-        <div class="text-center mb-6 sm:mb-8">
-          <div class="text-5xl sm:text-6xl mb-2 sm:mb-3">🐍🎲</div>
-          <h1 class="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-cyan-400 bg-clip-text text-transparent">Ular Tangga</h1>
-          <p class="text-slate-400 mt-2 sm:mt-3 text-xs sm:text-base">Permainan papan klasik yang seru</p>
-        </div>
-        
-        <div class="bg-slate-800/70 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/12 space-y-4 sm:space-y-6">
-          
-          <!-- Game Mode -->
-          <div>
-            <label class="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3 text-slate-200">🎮 Mode Permainan</label>
-            <div class="grid grid-cols-2 gap-2 sm:gap-3">
-              <button onclick="setMode('friends')" id="modeFriends" class="btn-secondary py-2 sm:py-3 text-xs sm:text-sm transition flex items-center justify-center gap-1 sm:gap-2">
-                <i data-lucide="users" style="width:16px;height:16px;"></i> <span class="hidden sm:inline">Vs</span> Teman
-              </button>
-              <button onclick="setMode('bot')" id="modeBot" class="btn-secondary py-2 sm:py-3 text-xs sm:text-sm transition flex items-center justify-center gap-1 sm:gap-2">
-                <i data-lucide="cpu" style="width:16px;height:16px;"></i> <span class="hidden sm:inline">Vs</span> Bot
-              </button>
-            </div>
-          </div>
-          
-          <!-- Player Count -->
-          <div>
-            <label class="block text-xs sm:text-sm font-semibold mb-2 text-slate-200">👥 Pemain: <span id="playerCountLabel" class="text-yellow-400">2</span></label>
-            <div class="flex items-center gap-2 sm:gap-3">
-              <input type="range" id="playerCountRange" min="1" max="6" value="2" oninput="updatePlayerCount(this.value)" class="flex-1 accent-yellow-400 h-2 rounded">
-              <span class="text-xs sm:text-sm text-slate-400 font-mono w-8">2</span>
-            </div>
-          </div>
-          
-          <!-- Players Setup -->
-          <div id="playersSetup" class="space-y-3 sm:space-y-4 max-h-64 sm:max-h-96 overflow-y-auto pr-2"></div>
-          
-          <!-- Start Button -->
-          <button onclick="startGame()" class="btn-primary w-full text-center text-base sm:text-lg py-3 sm:py-4 font-bold mt-4 sm:mt-6">🎲 Mulai Bermain!</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- GAME SCREEN -->
-    <div id="gameScreen" class="hidden flex-1 flex flex-col overflow-hidden bg-slate-950">
-      
-      <!-- Top Bar -->
-      <div class="flex items-center justify-between p-2 sm:p-3 bg-slate-800/90 border-b border-white/8 sticky top-0 z-50">
-        <button onclick="backToSetup()" class="btn-secondary py-1.5 sm:py-2 px-2 sm:px-3 text-xs sm:text-sm flex items-center gap-1 sm:gap-2">
-          <i data-lucide="arrow-left" style="width:16px;height:16px;"></i>
-          <span class="hidden sm:inline">Menu</span>
-        </button>
-        <h2 class="font-bold text-sm sm:text-base bg-gradient-to-r from-yellow-400 to-cyan-400 bg-clip-text text-transparent">Ular Tangga</h2>
-        <button onclick="showRules()" class="btn-secondary py-1.5 sm:py-2 px-2 sm:px-3 text-xs sm:text-sm">❓ <span class="hidden sm:inline">Aturan</span></button>
-      </div>
-      
-      <!-- Main Game Area -->
-      <div class="flex-1 overflow-auto p-2 sm:p-4">
-        <div class="flex flex-col lg:flex-row gap-2 sm:gap-4 max-w-7xl mx-auto h-full">
-          
-          <!-- Board -->
-          <div class="flex-1 flex items-center justify-center min-h-0">
-            <div id="boardContainer" class="relative w-full" style="max-width:600px;">
-              <div id="board" class="grid grid-cols-10 aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden border-2 sm:border-3 border-white/15 bg-slate-950" style="position:relative;"></div>
-              <svg id="snakeLadderSvg" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:4;" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-            </div>
-          </div>
-          
-          <!-- Side Panel -->
-          <div class="lg:w-64 xl:w-72 flex flex-col gap-2 sm:gap-4 min-h-0">
-            
-            <!-- Turn Indicator -->
-            <div id="turnIndicator" class="turn-indicator text-center font-semibold text-xs sm:text-sm p-2 sm:p-3"></div>
-            
-            <!-- Dice -->
-            <div class="flex flex-col items-center gap-2 sm:gap-4 bg-slate-800/40 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/8">
-              <span class="text-xs text-slate-400 font-semibold">Nilai Dadu</span>
-              <div id="diceDisplay" class="dice-face cursor-pointer hover:shadow-lg transition-shadow" onclick="rollDice()" title="Klik untuk lempar dadu"></div>
-              <button id="rollBtn" onclick="rollDice()" class="btn-primary px-6 sm:px-8 w-full py-2 sm:py-2.5 text-sm sm:text-base">🎲 Lempar</button>
-            </div>
-            
-            <!-- Scoreboard -->
-            <div class="scoreboard p-3 sm:p-4 flex-1 min-h-0 overflow-auto rounded-lg">
-              <h3 class="text-xs font-bold text-slate-300 mb-2 sm:mb-3 uppercase tracking-wider">📊 Pemain</h3>
-              <div id="scoreboard" class="space-y-1 sm:space-y-2 text-xs sm:text-sm"></div>
-            </div>
-            
-            <!-- Game Log -->
-            <div class="bg-slate-800/40 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/8 max-h-32 sm:max-h-40 overflow-auto">
-              <h3 class="text-xs font-bold text-slate-300 mb-2 uppercase tracking-wider">📝 Log</h3>
-              <div id="gameLog" class="space-y-1 text-xs text-slate-300"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Rules Modal -->
-  <div id="rulesModal" class="modal-overlay hidden" onclick="if(event.target===this)closeRules()">
-    <div class="modal-content max-h-[85vh] overflow-auto">
-      <div class="flex justify-between items-center mb-4 sm:mb-5">
-        <h2 class="text-xl sm:text-2xl font-bold">📜 Aturan Permainan</h2>
-        <button onclick="closeRules()" class="text-slate-400 hover:text-white transition p-1">
-          <i data-lucide="x" style="width:20px;height:20px;"></i>
-        </button>
-      </div>
-      <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
-        <p><strong class="text-yellow-400">🎯 Tujuan:</strong> Menjadi pemain pertama yang mencapai kotak 100.</p>
-        <p><strong class="text-yellow-400">🎲 Giliran:</strong> Setiap pemain melempar satu dadu (1-6) dan bergerak sesuai angka.</p>
-        <p><strong class="text-yellow-400">🚀 Mulai:</strong> Pemain harus melempar angka 6 untuk masuk papan. Jika dapat 6, lempar lagi.</p>
-        <p><strong class="text-yellow-400">6️⃣ Dadu 6:</strong> Jika dapat 6, pemain mendapat giliran tambahan. Tiga 6 berturut-turut, giliran hangus.</p>
-        <p><strong class="text-yellow-400">🪜 Tangga:</strong> Jika berhenti di dasar tangga, naik ke puncak.</p>
-        <p><strong class="text-yellow-400">🐍 Ular:</strong> Jika berhenti di kepala ular, turun ke ekor.</p>
-        <p><strong class="text-yellow-400">🏁 Menang:</strong> Harus mendarat tepat di 100. Jika lemparan melebihi, pemain tetap di posisi semula.</p>
-        <p><strong class="text-yellow-400">👥 Sama Kotak:</strong> Beberapa pemain boleh berada di kotak yang sama.</p>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Win Modal -->
-  <div id="winModal" class="modal-overlay hidden">
-    <div class="modal-content text-center bounce-in max-w-sm">
-      <div class="text-6xl sm:text-7xl mb-4 sm:mb-6">🏆</div>
-      <h2 id="winnerName" class="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3"></h2>
-      <p class="text-slate-400 mb-6 sm:mb-8 text-sm sm:text-lg">Selamat! Kamu menang! 🎉</p>
-      <div class="flex gap-2 sm:gap-3 justify-center flex-col sm:flex-row">
-        <button onclick="restartGame()" class="btn-primary flex-1 py-2 sm:py-3 text-sm sm:text-base">🔄 Main Lagi</button>
-        <button onclick="backToSetup()" class="btn-secondary flex-1 py-2 sm:py-3 text-sm sm:text-base">🏠 Menu</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Footer -->
-  <footer class="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950/90 to-transparent py-1 px-2 text-center text-[8px] sm:text-[10px] text-slate-600 z-10 pointer-events-none">
-    <p class="tracking-widest opacity-70">© 2026 Jimny Al Ramadhan | Ular Tangga Game</p>
-  </footer>
+<body>
 
-  <!-- Scripts -->
-  <script src="ut.js"></script>
+<!-- ============ SETUP SCREEN ============ -->
+<div id="setupScreen">
+  <div class="setup-card slide-up">
+    <div class="setup-header">
+      <div style="font-size:48px;margin-bottom:6px">🐍🎲</div>
+      <h1 id="gameTitle" class="setup-title">Ular Tangga</h1>
+      <p class="setup-sub">Permainan papan klasik yang seru!</p>
+    </div>
+
+    <!-- Mode -->
+    <label class="form-label">🎮 Mode Permainan</label>
+    <div class="mode-grid">
+      <button id="modeFriends" class="mode-btn active-friends" onclick="setMode('friends')">👥 Vs Teman</button>
+      <button id="modeBot" class="mode-btn" onclick="setMode('bot')">🤖 Vs Bot</button>
+    </div>
+
+    <!-- Player count -->
+    <label class="form-label">👥 Jumlah Pemain: <span id="playerCountLabel" style="color:var(--accent)">2</span></label>
+    <div class="count-row" style="margin-bottom:18px">
+      <input type="range" id="playerCountRange" min="1" max="6" value="2"
+        oninput="updatePlayerCount(this.value)" style="flex:1;accent-color:var(--accent);cursor:pointer">
+      <div class="count-badge" id="countBadge">2</div>
+    </div>
+
+    <!-- Players -->
+    <label class="form-label">⚙️ Pengaturan Pemain</label>
+    <div class="players-list" id="playersSetup"></div>
+
+    <button class="btn btn-primary" style="width:100%;padding:14px" onclick="startGame()">
+      🎲 Mulai Bermain!
+    </button>
+  </div>
+</div>
+
+<!-- ============ GAME SCREEN ============ -->
+<div id="gameScreen" class="hidden">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <button class="btn btn-ghost" onclick="backToSetup()">← Menu</button>
+    <span id="gameTitleBar" class="topbar-title">Ular Tangga</span>
+    <button class="btn btn-ghost" onclick="showRules()">❓ Aturan</button>
+  </div>
+
+  <!-- Body -->
+  <div class="game-body">
+
+    <!-- Board -->
+    <div class="board-wrap">
+      <div class="board-outer" id="boardOuter">
+        <div id="board" class="board-grid"></div>
+        <svg id="snakeSvg" class="snake-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <!-- Side Panel -->
+    <div class="side-panel">
+
+      <!-- Turn Indicator -->
+      <div class="turn-card" id="turnIndicator"></div>
+
+      <!-- Dice -->
+      <div class="dice-card">
+        <div id="diceDisplay" class="dice-face" onclick="rollDice()" title="Klik untuk lempar"></div>
+        <button id="rollBtn" class="btn btn-primary btn-roll" onclick="rollDice()">🎲 Lempar</button>
+      </div>
+
+      <!-- Scoreboard -->
+      <div class="panel-card">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">📊 Pemain</div>
+        <div class="score-list" id="scoreboard"></div>
+      </div>
+
+      <!-- Log -->
+      <div class="log-box" id="gameLog"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ RULES MODAL ============ -->
+<div id="rulesModal" class="overlay hidden" onclick="if(event.target===this)closeRules()">
+  <div class="modal">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h2 style="margin:0">📜 Aturan Permainan</h2>
+      <button class="btn btn-ghost" style="padding:6px 12px" onclick="closeRules()">✕</button>
+    </div>
+    <div class="rules-item"><strong>🎯 Tujuan:</strong> Menjadi pemain pertama yang mencapai kotak 100.</div>
+    <div class="rules-item"><strong>🎲 Giliran:</strong> Lempar dadu (1–6), bergerak sesuai angka.</div>
+    <div class="rules-item"><strong>🚀 Masuk Papan:</strong> Harus lempar angka <strong>6</strong> untuk masuk. Jika dapat 6, lempar lagi.</div>
+    <div class="rules-item"><strong>6️⃣ Dadu 6:</strong> Dapat giliran tambahan. Tiga kali 6 berturut-turut, giliran hangus.</div>
+    <div class="rules-item"><strong>🪜 Tangga:</strong> Berhenti di dasar tangga → naik ke puncak.</div>
+    <div class="rules-item"><strong>🐍 Ular:</strong> Berhenti di kepala ular → turun ke ekor.</div>
+    <div class="rules-item"><strong>🏁 Menang:</strong> Harus mendarat tepat di 100. Jika lebih, memantul kembali.</div>
+    <div class="rules-item"><strong>👥 Kotak Sama:</strong> Beberapa pemain boleh berbagi satu kotak.</div>
+  </div>
+</div>
+
+<!-- ============ WIN MODAL ============ -->
+<div id="winModal" class="overlay hidden">
+  <div class="modal win-modal bounce-in">
+    <div class="win-trophy">🏆</div>
+    <div id="winnerName" class="win-name"></div>
+    <div class="win-sub">Selamat! Kamu menang! 🎉</div>
+    <div class="win-btns">
+      <button class="btn btn-primary" style="flex:1;min-width:130px;padding:13px" onclick="restartGame()">🔄 Main Lagi</button>
+      <button class="btn btn-ghost" style="flex:1;min-width:130px;padding:13px" onclick="backToSetup()">🏠 Menu Utama</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer style="position:fixed;bottom:0;left:0;right:0;text-align:center;font-size:10px;color:rgba(148,163,184,.4);padding:4px;pointer-events:none;z-index:10">
+  Designed by <span style="color:rgba(148,163,184,.6)">Jimny Al Ramadhan Syahnendi</span> © 2026
+</footer>
+
+<script src="ut.js"></script>
 </body>
 </html>
