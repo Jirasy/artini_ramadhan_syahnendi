@@ -78,7 +78,7 @@
                             <option value="tottenham">Tottenham Hotspur</option>
                             <option value="newcastle">Newcastle United</option>
                             <option value="westham">West Ham United</option>
-                            <option value="liverpool">Aston Villa</option>
+                            <option value="astonvilla">Aston Villa</option>
                             <option value="brighton">Brighton & Hove</option>
                         </optgroup>
                         <optgroup label="🇪🇸 La Liga">
@@ -194,8 +194,8 @@
                             <input type="color" id="player-color" value="#FF0000">
                         </div>
                         <div class="color-group">
-                            <label>TIM LAWAN</label>
-                            <input type="color" id="enemy-color" value="#0000FF">
+                            <label>TIM LAWAN <span id="enemy-team-label" style="font-size: 11px; color: #f39c12;"></span></label>
+                            <input type="color" id="enemy-color" value="#0000FF" onchange="updateEnemyColorInput()" oninput="updateEnemyColorInput()">
                         </div>
                     </div>
                 </div>
@@ -229,7 +229,6 @@
         </div>
 
     </div>
-
 
     <script src="Sepak-bola.js"></script>
 </body>
