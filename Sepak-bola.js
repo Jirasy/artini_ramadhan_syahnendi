@@ -11,7 +11,7 @@ const teamsDatabase = {
     "tottenham": { name: "Tottenham", color: "#FFFFFF" },
     "newcastle": { name: "Newcastle United", color: "#FFFFFF" },
     "westham": { name: "West Ham", color: "#7A263A" },
-    "liverpool": { name: "Aston Villa", color: "#95BWE5" },
+    "astonvilla": { name: "Aston Villa", color: "#95B2E5" },
     "brighton": { name: "Brighton", color: "#0057B8" },
 
     // La Liga
@@ -151,6 +151,52 @@ const ball = { x: 0, y: 0, r: 10, vx: 0, vy: 0, friction: 0.985 };
 const goal = { w: 14, h: 140 };
 
 // ============================================
+// FUNGSI PENCARIAN WARNA TERDEKAT (COLOR MATCHING)
+// ============================================
+function hexToRgb(hex) {
+    let bigint = parseInt(hex.replace("#", ""), 16);
+    let r = (bigint >> 16) & 255;
+    let g = (bigint >> 8) & 255;
+    let b = bigint & 255;
+    return { r, g, b };
+}
+
+function findClosestTeamByColor(hexColor) {
+    const targetRgb = hexToRgb(hexColor);
+    let closestTeamKey = null;
+    let minDistance = Infinity;
+
+    for (let key in teamsDatabase) {
+        if (key === "custom") continue;
+        const teamRgb = hexToRgb(teamsDatabase[key].color);
+        // Euclidean distance di ruang warna RGB
+        const dist = Math.sqrt(
+            Math.pow(targetRgb.r - teamRgb.r, 2) +
+            Math.pow(targetRgb.g - teamRgb.g, 2) +
+            Math.pow(targetRgb.b - teamRgb.b, 2)
+        );
+        if (dist < minDistance) {
+            minDistance = dist;
+            closestTeamKey = key;
+        }
+    }
+    return closestTeamKey;
+}
+
+function updateEnemyColorInput() {
+    const enemyColor = document.getElementById("enemy-color").value;
+    const closestKey = findClosestTeamByColor(enemyColor);
+    const labelEl = document.getElementById("enemy-team-label");
+    
+    if (closestKey && teamsDatabase[closestKey]) {
+        enemyTeam.name = teamsDatabase[closestKey].name;
+        if (labelEl) {
+            labelEl.innerText = `(${teamsDatabase[closestKey].name})`;
+        }
+    }
+}
+
+// ============================================
 // INISIALISASI
 // ============================================
 function resize() {
@@ -278,13 +324,11 @@ btnShoot.addEventListener("touchend", function () {
 function checkOrientation() {
     const warning = document.getElementById("orientation-warning");
 
-    // Jika di desktop, sembunyikan warning
     if (window.innerWidth > 768) {
         warning.classList.add("hidden");
         return;
     }
 
-    // Jika portrait di mobile, tampilkan warning
     if (window.innerHeight > window.innerWidth) {
         warning.classList.remove("hidden");
     } else {
@@ -306,7 +350,6 @@ function update() {
 
     // === 1. GERAKAN USER ===
     if (playerPosition === "attacker") {
-        // Kontrol Player
         let moveX = 0;
         let moveY = 0;
 
@@ -329,7 +372,6 @@ function update() {
         userTeam.player.x += moveX * userTeam.player.speed;
         userTeam.player.y += moveY * userTeam.player.speed;
 
-        // Batas Player
         keepInBounds(userTeam.player);
     }
 
@@ -353,9 +395,7 @@ function update() {
 
     // === 3. GERAKAN KEEPER AI ===
     updateKeeper(enemyTeam.keeper, ball, false);
-
-
-        updateKeeper(userTeam.keeper, ball, true);
+    updateKeeper(userTeam.keeper, ball, true);
 
     // === 5. GERAKAN BOLA ===
     ball.x += ball.vx;
@@ -370,7 +410,6 @@ function update() {
     checkBallCollision(userTeam.player, true);
     checkBallCollision(enemyTeam.player, false);
 
-    // Keeper menangkap bola
     checkKeeperSave(userTeam.keeper, true);
     checkKeeperSave(enemyTeam.keeper, false);
 
@@ -379,26 +418,20 @@ function update() {
 }
 
 function updateKeeper(keeper, targetBall, isUser) {
-    // Keeper mengikuti posisi Y bola dengan delay
     let targetY = targetBall.y;
-
-    // Batas gawang
     const goalTop = goal.h / 2 + 20;
     const goalBottom = fieldHeight - goal.h / 2 - 20;
 
     if (targetY < goalTop) targetY = goalTop;
     if (targetY > goalBottom) targetY = goalBottom;
 
-    // Gerakan pelan menuju target Y
     const dy = targetY - keeper.y;
     keeper.y += dy * 0.08;
 
-    // Gerakan kecil kiri-kanan (menjaga posisi)
     const goalX = isUser ? 30 : fieldWidth - 30;
     const dx = goalX - keeper.x;
     keeper.x += dx * 0.05;
 
-    // Clamp posisi keeper
     if (keeper.y < goalTop) keeper.y = goalTop;
     if (keeper.y > goalBottom) keeper.y = goalBottom;
 }
@@ -424,13 +457,11 @@ function checkBallCollision(entity, isUserControlled) {
         ball.vx = Math.cos(angle) * force;
         ball.vy = Math.sin(angle) * force;
 
-        // Shoot keras jika tombol ditekan
         if ((keys.space || touchInput.shooting) && isUserControlled && playerPosition === "attacker") {
             ball.vx *= 2.0;
             ball.vy *= 2.0;
         }
 
-        // Pisahkan bola dari pemain
         const overlap = minDist - dist;
         ball.x += Math.cos(angle) * overlap;
         ball.y += Math.sin(angle) * overlap;
@@ -444,16 +475,11 @@ function checkKeeperSave(keeper, isUserKeeper) {
     const minDist = ball.r + keeper.r + 5;
 
     if (dist < minDist) {
-        // Bola ditangkap keeper
         const force = 8;
-
-        // Tendang bola menjauh dari gawang
         if (isUserKeeper) {
-            // Keeper user: tendang ke kanan
             ball.vx = Math.abs(force) + Math.random() * 3;
             ball.vy = (Math.random() - 0.5) * 10;
         } else {
-            // Keeper AI: tendang ke kiri
             ball.vx = -Math.abs(force) - Math.random() * 3;
             ball.vy = (Math.random() - 0.5) * 10;
         }
@@ -464,7 +490,6 @@ function checkFieldBounds() {
     const goalTop = (fieldHeight - goal.h) / 2;
     const goalBottom = (fieldHeight + goal.h) / 2;
 
-    // Atas & bawah
     if (ball.y - ball.r < 0) {
         ball.y = ball.r;
         ball.vy *= -0.8;
@@ -474,10 +499,8 @@ function checkFieldBounds() {
         ball.vy *= -0.8;
     }
 
-    // Kiri (bukan gawang)
     if (ball.x - ball.r < 0) {
         if (ball.y > goalTop && ball.y < goalBottom) {
-            // GOL untuk tim kanan!
             if (!isGoalScored) {
                 enemyTeam.score++;
                 showGoalScored(enemyTeam.name);
@@ -488,10 +511,8 @@ function checkFieldBounds() {
         }
     }
 
-    // Kanan (bukan gawang)
     if (ball.x + ball.r > fieldWidth) {
         if (ball.y > goalTop && ball.y < goalBottom) {
-            // GOL untuk tim kiri!
             if (!isGoalScored) {
                 userTeam.score++;
                 showGoalScored(userTeam.name);
@@ -541,72 +562,50 @@ function updateScore() {
 // RENDER
 // ============================================
 function draw() {
-    // Background
     ctx.fillStyle = "#4CAF50";
     ctx.fillRect(0, 0, fieldWidth, fieldHeight);
 
-    // Garis lapangan
     ctx.strokeStyle = "rgba(255,255,255,0.5)";
     ctx.lineWidth = 3;
 
-    // Border lapangan
     ctx.strokeRect(30, 30, fieldWidth - 60, fieldHeight - 60);
 
-    // Garis tengah
     ctx.beginPath();
     ctx.moveTo(fieldWidth / 2, 30);
     ctx.lineTo(fieldWidth / 2, fieldHeight - 30);
     ctx.stroke();
 
-    // Lingkaran tengah
     ctx.beginPath();
     ctx.arc(fieldWidth / 2, fieldHeight / 2, 80, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Kotak penalti kiri
     ctx.strokeRect(30, fieldHeight / 2 - 80, 100, 160);
-
-    // Kotak penalti kanan
     ctx.strokeRect(fieldWidth - 130, fieldHeight / 2 - 80, 100, 160);
 
-    // Gawang
     const goalTop = (fieldHeight - goal.h) / 2;
 
-    // Gawang kiri
     ctx.fillStyle = "rgba(255,255,255,0.3)";
     ctx.fillRect(0, goalTop, goal.w, goal.h);
     ctx.strokeStyle = "white";
     ctx.lineWidth = 4;
     ctx.strokeRect(0, goalTop, goal.w, goal.h);
 
-    // Gawang kanan
     ctx.fillRect(fieldWidth - goal.w, goalTop, goal.w, goal.h);
     ctx.strokeRect(fieldWidth - goal.w, goalTop, goal.w, goal.h);
 
-    // Gambar Keeper AI (kanan)
     drawKeeper(enemyTeam.keeper, enemyTeam.color);
-
-    // Gambar Player AI
     drawPlayerEntity(enemyTeam.player, enemyTeam.color);
-
-    // Gambar Keeper User (kiri)
     drawKeeper(userTeam.keeper, userTeam.color);
-
-    // Gambar Player User
     drawPlayerEntity(userTeam.player, userTeam.color);
-
-    // Gambar Bola
     drawBall();
 }
 
 function drawBall() {
-    // Shadow bola
     ctx.beginPath();
     ctx.ellipse(ball.x, ball.y + ball.r - 3, ball.r * 0.8, ball.r * 0.3, 0, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(0,0,0,0.25)";
     ctx.fill();
 
-    // Bola utama
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
     ctx.fillStyle = "#FFFFFF";
@@ -615,7 +614,6 @@ function drawBall() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Detail bola (polygon)
     ctx.beginPath();
     ctx.moveTo(ball.x, ball.y - ball.r + 3);
     for (let i = 1; i <= 5; i++) {
@@ -628,13 +626,11 @@ function drawBall() {
 }
 
 function drawPlayerEntity(p, color) {
-    // Shadow
     ctx.beginPath();
     ctx.ellipse(p.x, p.y + p.r - 5, p.r * 0.7, p.r * 0.25, 0, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(0,0,0,0.3)";
     ctx.fill();
 
-    // Body pemain
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fillStyle = color;
@@ -643,7 +639,6 @@ function drawPlayerEntity(p, color) {
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Inisial nama
     ctx.fillStyle = "white";
     ctx.font = "bold 14px Arial";
     ctx.textAlign = "center";
@@ -652,13 +647,11 @@ function drawPlayerEntity(p, color) {
 }
 
 function drawKeeper(k, color) {
-    // Shadow
     ctx.beginPath();
     ctx.ellipse(k.x, k.y + k.r - 5, k.r * 0.7, k.r * 0.25, 0, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(0,0,0,0.3)";
     ctx.fill();
 
-    // Keeper body
     ctx.beginPath();
     ctx.arc(k.x, k.y, k.r, 0, Math.PI * 2);
     ctx.fillStyle = color;
@@ -667,14 +660,12 @@ function drawKeeper(k, color) {
     ctx.lineWidth = 4;
     ctx.stroke();
 
-    // Keeper gloves
     ctx.beginPath();
     ctx.arc(k.x - k.r, k.y, 8, 0, Math.PI * 2);
     ctx.arc(k.x + k.r, k.y, 8, 0, Math.PI * 2);
     ctx.fillStyle = "#FFD700";
     ctx.fill();
 
-    // Label K
     ctx.fillStyle = "white";
     ctx.font = "bold 14px Arial";
     ctx.textAlign = "center";
@@ -720,16 +711,19 @@ function startGame() {
         userTeam.color = document.getElementById("player-color").value;
     } else if (teamsDatabase[preset]) {
         userTeam.name = teamsDatabase[preset].name;
-        userTeam.color = teamsDatabase[preset].color;
+        userTeam.color = document.getElementById("player-color").value;
     }
 
-    // Setup tim enemy (acak)
-    const keys = Object.keys(teamsDatabase).filter(function (k) {
-        return k !== preset && k !== "custom";
-    });
-    const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    enemyTeam.name = teamsDatabase[randomKey].name;
-    enemyTeam.color = teamsDatabase[randomKey].color;
+    // Setup tim enemy: MENGGUNAKAN WARNA PILIHAN USER & OTOMATIS MENCARI TIM TERDEKAT
+    const enemyColorVal = document.getElementById("enemy-color").value;
+    enemyTeam.color = enemyColorVal;
+    
+    const closestKey = findClosestTeamByColor(enemyColorVal);
+    if (closestKey && teamsDatabase[closestKey]) {
+        enemyTeam.name = teamsDatabase[closestKey].name;
+    } else {
+        enemyTeam.name = "CPU";
+    }
 
     // Reset skor
     userTeam.score = 0;
@@ -789,12 +783,11 @@ window.addEventListener("resize", function () {
     checkOrientation();
 });
 
-// Check orientation on load
 window.addEventListener("load", function () {
     checkOrientation();
+    updateEnemyColorInput(); // Inisialisasi nama tim lawan pertama kali
 });
 
-// Also check orientation on change
 window.addEventListener("orientationchange", function () {
     setTimeout(checkOrientation, 100);
 });
