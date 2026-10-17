@@ -151,52 +151,6 @@ const ball = { x: 0, y: 0, r: 10, vx: 0, vy: 0, friction: 0.985 };
 const goal = { w: 14, h: 140 };
 
 // ============================================
-// FUNGSI PENCARIAN WARNA TERDEKAT (COLOR MATCHING)
-// ============================================
-function hexToRgb(hex) {
-    let bigint = parseInt(hex.replace("#", ""), 16);
-    let r = (bigint >> 16) & 255;
-    let g = (bigint >> 8) & 255;
-    let b = bigint & 255;
-    return { r, g, b };
-}
-
-function findClosestTeamByColor(hexColor) {
-    const targetRgb = hexToRgb(hexColor);
-    let closestTeamKey = null;
-    let minDistance = Infinity;
-
-    for (let key in teamsDatabase) {
-        if (key === "custom") continue;
-        const teamRgb = hexToRgb(teamsDatabase[key].color);
-        // Euclidean distance di ruang warna RGB
-        const dist = Math.sqrt(
-            Math.pow(targetRgb.r - teamRgb.r, 2) +
-            Math.pow(targetRgb.g - teamRgb.g, 2) +
-            Math.pow(targetRgb.b - teamRgb.b, 2)
-        );
-        if (dist < minDistance) {
-            minDistance = dist;
-            closestTeamKey = key;
-        }
-    }
-    return closestTeamKey;
-}
-
-function updateEnemyColorInput() {
-    const enemyColor = document.getElementById("enemy-color").value;
-    const closestKey = findClosestTeamByColor(enemyColor);
-    const labelEl = document.getElementById("enemy-team-label");
-    
-    if (closestKey && teamsDatabase[closestKey]) {
-        enemyTeam.name = teamsDatabase[closestKey].name;
-        if (labelEl) {
-            labelEl.innerText = `(${teamsDatabase[closestKey].name})`;
-        }
-    }
-}
-
-// ============================================
 // INISIALISASI
 // ============================================
 function resize() {
@@ -211,34 +165,27 @@ function resize() {
 }
 
 function resetPositions() {
-    // Bola di tengah
     ball.x = fieldWidth / 2;
     ball.y = fieldHeight / 2;
     ball.vx = 0;
     ball.vy = 0;
 
     if (playerPosition === "attacker") {
-        // User: Player di kiri, Keeper di gawang kiri
         userTeam.player.x = fieldWidth * 0.2;
         userTeam.player.y = fieldHeight / 2;
         userTeam.keeper.x = 40;
         userTeam.keeper.y = fieldHeight / 2;
 
-        // Enemy: Player di kanan, Keeper di gawang kanan
         enemyTeam.player.x = fieldWidth * 0.8;
         enemyTeam.player.y = fieldHeight / 2;
         enemyTeam.keeper.x = fieldWidth - 40;
         enemyTeam.keeper.y = fieldHeight / 2;
     }
 
-    // Init keeper target
     userTeam.keeper.targetY = fieldHeight / 2;
     enemyTeam.keeper.targetY = fieldHeight / 2;
 }
 
-// ============================================
-// PEMILIHAN POSISI
-// ============================================
 function selectPosition(pos) {
     playerPosition = "attacker";
 }
@@ -323,12 +270,10 @@ btnShoot.addEventListener("touchend", function () {
 // ============================================
 function checkOrientation() {
     const warning = document.getElementById("orientation-warning");
-
     if (window.innerWidth > 768) {
         warning.classList.add("hidden");
         return;
     }
-
     if (window.innerHeight > window.innerWidth) {
         warning.classList.remove("hidden");
     } else {
@@ -348,7 +293,6 @@ function update() {
         return;
     }
 
-    // === 1. GERAKAN USER ===
     if (playerPosition === "attacker") {
         let moveX = 0;
         let moveY = 0;
@@ -375,7 +319,6 @@ function update() {
         keepInBounds(userTeam.player);
     }
 
-    // === 2. GERAKAN AI (PLAYER) ===
     let aiMoveX = 0;
     let aiMoveY = 0;
     const target = ball;
@@ -393,11 +336,9 @@ function update() {
     enemyTeam.player.y += aiMoveY * enemyTeam.player.speed;
     keepInBounds(enemyTeam.player);
 
-    // === 3. GERAKAN KEEPER AI ===
     updateKeeper(enemyTeam.keeper, ball, false);
     updateKeeper(userTeam.keeper, ball, true);
 
-    // === 5. GERAKAN BOLA ===
     ball.x += ball.vx;
     ball.y += ball.vy;
     ball.vx *= ball.friction;
@@ -406,14 +347,12 @@ function update() {
     if (Math.abs(ball.vx) < 0.05) ball.vx = 0;
     if (Math.abs(ball.vy) < 0.05) ball.vy = 0;
 
-    // === 6. TUMBUKAN ===
     checkBallCollision(userTeam.player, true);
     checkBallCollision(enemyTeam.player, false);
 
     checkKeeperSave(userTeam.keeper, true);
     checkKeeperSave(enemyTeam.keeper, false);
 
-    // === 7. BATAS LAPANGAN & GOL ===
     checkFieldBounds();
 }
 
@@ -702,27 +641,55 @@ function updateTeamInput() {
     }
 }
 
+function updateEnemyTeamInput() {
+    const preset = document.getElementById("enemy-team-preset").value;
+    const nameInput = document.getElementById("enemy-custom-name");
+    const colorInput = document.getElementById("enemy-color");
+    const customGroup = document.getElementById("enemy-custom-name-group");
+
+    if (preset === "custom") {
+        customGroup.style.display = "block";
+        nameInput.value = "";
+        colorInput.value = "#0000FF";
+    } else if (teamsDatabase[preset]) {
+        customGroup.style.display = "none";
+        nameInput.value = teamsDatabase[preset].name;
+        colorInput.value = teamsDatabase[preset].color;
+    }
+}
+
 function startGame() {
-    const preset = document.getElementById("team-preset").value;
+    const userPreset = document.getElementById("team-preset").value;
+    const enemyPreset = document.getElementById("enemy-team-preset").value;
+
+    // VALIDASI 1: Tim tidak boleh sama (kecuali custom)
+    if (userPreset !== "custom" && enemyPreset !== "custom" && userPreset === enemyPreset) {
+        alert("⚠️ Tim kamu dan tim lawan tidak boleh sama! Silakan pilih tim yang berbeda.");
+        return;
+    }
 
     // Setup tim user
-    if (preset === "custom") {
-        userTeam.name = document.getElementById("player-name").value || "Custom";
+    if (userPreset === "custom") {
+        userTeam.name = document.getElementById("player-name").value || "Custom Team 1";
         userTeam.color = document.getElementById("player-color").value;
-    } else if (teamsDatabase[preset]) {
-        userTeam.name = teamsDatabase[preset].name;
+    } else if (teamsDatabase[userPreset]) {
+        userTeam.name = teamsDatabase[userPreset].name;
         userTeam.color = document.getElementById("player-color").value;
     }
 
-    // Setup tim enemy: MENGGUNAKAN WARNA PILIHAN USER & OTOMATIS MENCARI TIM TERDEKAT
-    const enemyColorVal = document.getElementById("enemy-color").value;
-    enemyTeam.color = enemyColorVal;
-    
-    const closestKey = findClosestTeamByColor(enemyColorVal);
-    if (closestKey && teamsDatabase[closestKey]) {
-        enemyTeam.name = teamsDatabase[closestKey].name;
-    } else {
-        enemyTeam.name = "CPU";
+    // Setup tim enemy
+    if (enemyPreset === "custom") {
+        enemyTeam.name = document.getElementById("enemy-custom-name").value || "Custom Team 2";
+        enemyTeam.color = document.getElementById("enemy-color").value;
+    } else if (teamsDatabase[enemyPreset]) {
+        enemyTeam.name = teamsDatabase[enemyPreset].name;
+        enemyTeam.color = document.getElementById("enemy-color").value;
+    }
+
+    // VALIDASI 2: Warna jersey tidak boleh sama persis
+    if (userTeam.color.toLowerCase() === enemyTeam.color.toLowerCase()) {
+        alert("⚠️ Warna jersey tim kamu dan tim lawan tidak boleh sama persis! Silakan ubah salah satu warna.");
+        return;
     }
 
     // Reset skor
@@ -785,7 +752,8 @@ window.addEventListener("resize", function () {
 
 window.addEventListener("load", function () {
     checkOrientation();
-    updateEnemyColorInput(); // Inisialisasi nama tim lawan pertama kali
+    updateTeamInput();
+    updateEnemyTeamInput();
 });
 
 window.addEventListener("orientationchange", function () {
