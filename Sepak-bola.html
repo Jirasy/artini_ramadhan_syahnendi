@@ -66,8 +66,9 @@
                     </div>
                 </div>
 
+                <!-- PILIH TIM KAMU -->
                 <div class="form-group">
-                    <label>🏆 PILIH TIM:</label>
+                    <label>🏆 PILIH TIM KAMU:</label>
                     <select id="team-preset" onchange="updateTeamInput()">
                         <optgroup label="🇬🇧 Premier League">
                             <option value="arsenal">Arsenal</option>
@@ -182,10 +183,132 @@
                 </div>
 
                 <div class="form-group" id="custom-name-group" style="display: none;">
-                    <label>NAMA TIM CUSTOM:</label>
+                    <label>NAMA TIM CUSTOM KAMU:</label>
                     <input type="text" id="player-name" placeholder="Masukkan nama tim..." maxlength="15">
                 </div>
 
+                <!-- PILIH TIM LAWAN (BARU) -->
+                <div class="form-group">
+                    <label>🏆 PILIH TIM LAWAN:</label>
+                    <select id="enemy-team-preset" onchange="updateEnemyTeamInput()">
+                        <optgroup label="🇬🇧 Premier League">
+                            <option value="arsenal">Arsenal</option>
+                            <option value="manutd" selected>Manchester United</option>
+                            <option value="liverpool">Liverpool</option>
+                            <option value="mancity">Manchester City</option>
+                            <option value="chelsea">Chelsea</option>
+                            <option value="tottenham">Tottenham Hotspur</option>
+                            <option value="newcastle">Newcastle United</option>
+                            <option value="westham">West Ham United</option>
+                            <option value="astonvilla">Aston Villa</option>
+                            <option value="brighton">Brighton & Hove</option>
+                        </optgroup>
+                        <optgroup label="🇪🇸 La Liga">
+                            <option value="realmadrid">Real Madrid</option>
+                            <option value="barcelona">Barcelona</option>
+                            <option value="atletico">Atlético Madrid</option>
+                            <option value="sevilla">Sevilla</option>
+                            <option value="betis">Real Betis</option>
+                            <option value="villareal">Villarreal</option>
+                            <option value="realsociedad">Real Sociedad</option>
+                            <option value="athletic">Athletic Bilbao</option>
+                        </optgroup>
+                        <optgroup label="🇮🇹 Serie A">
+                            <option value="juventus">Juventus</option>
+                            <option value="inter">Inter Milan</option>
+                            <option value="milan">AC Milan</option>
+                            <option value="napoli">Napoli</option>
+                            <option value="roma">AS Roma</option>
+                            <option value="lazio">Lazio</option>
+                            <option value="atalanta">Atalanta</option>
+                            <option value="fiorentina">Fiorentina</option>
+                        </optgroup>
+                        <optgroup label="🇩🇪 Bundesliga">
+                            <option value="bayern">Bayern Munich</option>
+                            <option value="dortmund">Borussia Dortmund</option>
+                            <option value="leverkusen">Bayer Leverkusen</option>
+                            <option value="rbleipzig">RB Leipzig</option>
+                            <option value="frankfurt">Eintracht Frankfurt</option>
+                            <option value="mgladbach">M"gladbach</option>
+                        </optgroup>
+                        <optgroup label="🇫🇷 Ligue 1">
+                            <option value="psg">Paris Saint-Germain</option>
+                            <option value="marseille">Olympique Marseille</option>
+                            <option value="lyon">Olympique Lyon</option>
+                            <option value="monaco">AS Monaco</option>
+                            <option value="lille">Lille</option>
+                            <option value="rennes">Stade Rennais</option>
+                        </optgroup>
+                        <optgroup label="🇵🇹 Primeira Liga">
+                            <option value="benfica">Benfica</option>
+                            <option value="porto">Porto</option>
+                            <option value="sporting">Sporting CP</option>
+                            <option value="braga">Braga</option>
+                        </optgroup>
+                        <optgroup label="🇳🇱 Eredivisie">
+                            <option value="ajax">Ajax Amsterdam</option>
+                            <option value="feyenoord">Feyenoord</option>
+                            <option value="psveindhoven">PSV Eindhoven</option>
+                            <option value="az">AZ Alkmaar</option>
+                        </optgroup>
+                        <optgroup label="🇧🇷 Serie A Brasil">
+                            <option value="flamengo">Flamengo</option>
+                            <option value="palmeiras">Palmeiras</option>
+                            <option value="corinthians">Corinthians</option>
+                            <option value="saopaulo">São Paulo</option>
+                            <option value="santos">Santos</option>
+                            <option value="botafogo">Botafogo</option>
+                            <option value="vasco">Vasco da Gama</option>
+                            <option value="cruzeiro">Cruzeiro</option>
+                        </optgroup>
+                        <optgroup label="🇦🇷 Primera División">
+                            <option value="boca">Boca Juniors</option>
+                            <option value="river">River Plate</option>
+                            <option value="independiente">Independiente</option>
+                            <option value="racing">Racing Club</option>
+                            <option value="sanlorenzo">San Lorenzo</option>
+                        </optgroup>
+                        <optgroup label="🌍 Lainnya">
+                            <option value="galatasaray">Galatasaray (Turki)</option>
+                            <option value="fenerbahce">Fenerbahçe (Turki)</option>
+                            <option value="shakhtar">Shakhtar Donetsk</option>
+                            <option value="zenit">Zenit St. Petersburg</option>
+                            <option value="celtic">Celtic (Skotlandia)</option>
+                            <option value="rangers">Rangers (Skotlandia)</option>
+                            <option value="olympiacos">Olympiacos (Yunani)</option>
+                            <option value="aek">AEK Athens (Yunani)</option>
+                            <option value="clubbrugge">Club Brugge (Belgia)</option>
+                            <option value="youngboys">Young Boys (Swiss)</option>
+                            <option value="copenhagen">FC Copenhagen (Denmark)</option>
+                            <option value="rosenborg">Rosenborg (Norwegia)</option>
+                            <option value="salzburg">Red Bull Salzburg (Austria)</option>
+                            <option value="dinamozagreb">Dinamo Zagreb (Kroasia)</option>
+                            <option value="ferencvaros">Ferencváros (Hungaria)</option>
+                            <option value="legia">Legia Warsaw (Polandia)</option>
+                            <option value="spartapraha">Sparta Prague (Rep. Ceko)</option>
+                            <option value="fcsb">FCSB Steaua (Rumania)</option>
+                            <option value="maccabi">Maccabi Tel Aviv (Israel)</option>
+                            <option value="alhilal">Al Hilal (Arab Saudi)</option>
+                            <option value="alahly">Al Ahly (Mesir)</option>
+                            <option value="wydad">Wydad Casablanca (Maroko)</option>
+                            <option value="mamelodi">Mamelodi Sundowns (Afsel)</option>
+                            <option value="sydney">Sydney FC (Australia)</option>
+                            <option value="urawa">Urawa Red Diamonds (Jepang)</option>
+                            <option value="yokohama">Yokohama F. Marinos</option>
+                            <option value="kashima">Kashima Antlers (Jepang)</option>
+                            <option value="ulsan">Ulsan Hyundai (Korea)</option>
+                            <option value="beijing">Beijing Guoan (China)</option>
+                            <option value="custom">🏆 TIM CUSTOM LAWAN</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group" id="enemy-custom-name-group" style="display: none;">
+                    <label>NAMA TIM CUSTOM LAWAN:</label>
+                    <input type="text" id="enemy-custom-name" placeholder="Masukkan nama tim lawan..." maxlength="15">
+                </div>
+
+                <!-- WARNA JERSEY -->
                 <div class="form-group">
                     <label>🎨 WARNA JERSEY:</label>
                     <div class="color-row">
@@ -194,8 +317,8 @@
                             <input type="color" id="player-color" value="#FF0000">
                         </div>
                         <div class="color-group">
-                            <label>TIM LAWAN <span id="enemy-team-label" style="font-size: 11px; color: #f39c12;"></span></label>
-                            <input type="color" id="enemy-color" value="#0000FF" onchange="updateEnemyColorInput()" oninput="updateEnemyColorInput()">
+                            <label>TIM LAWAN</label>
+                            <input type="color" id="enemy-color" value="#DA291C">
                         </div>
                     </div>
                 </div>
@@ -230,7 +353,7 @@
 
     </div>
 
-    <script src="Sepak-bola.js"></script>
+    <script src="Sepak-bola.js?v=3.0"></script>
 </body>
 
 </html>
