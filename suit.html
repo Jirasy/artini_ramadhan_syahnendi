@@ -18,18 +18,18 @@
                 <h1 class="game-title text-4xl md:text-5xl font-bold text-light text-shadow mb-2" style="font-family: 'Space Mono', monospace;">
                     GAME SUIT LAWAN BOT
                 </h1>
-                <p class="text-light text-shadow text-opacity-80 text-sm md:text-base">Bermain Suit melawan AI • Cepat & Ringan</p>
+                <p class="text-light text-shadow text-opacity-80 text-sm md:text-base">Bermain Suit melawan AI • Live Match</p>
                 <div class="time-display text-light text-shadow mt-3 opacity-70">
                     <span id="current-time">--:--</span> • <span id="current-greeting">Selamat datang</span>
                 </div>
             </div>
 
             <!-- Score Board -->
-            <div class="glass-panel p-6 md:p-8 mb-8">
+            <div class="glass-panel p-6 md:p-8 mb-8 rounded-3xl">
                 <div class="grid grid-cols-3 gap-4 text-center">
                     <div>
                         <p class="text-light text-opacity-70 text-xs md:text-sm font-medium mb-2 uppercase tracking-widest">Anda</p>
-                        <p id="player-score" class="text-3xl md:text-4xl font-bold text-light text-shadow">0</p>
+                        <p id="player-score" class="text-3xl md:text-4xl font-bold text-light text-shadow score-update">0</p>
                     </div>
                     <div>
                         <p class="text-light text-opacity-70 text-xs md:text-sm font-medium mb-2 uppercase tracking-widest">Status</p>
@@ -37,13 +37,13 @@
                     </div>
                     <div>
                         <p class="text-light text-opacity-70 text-xs md:text-sm font-medium mb-2 uppercase tracking-widest">AI</p>
-                        <p id="ai-score" class="text-3xl md:text-4xl font-bold text-light text-shadow">0</p>
+                        <p id="ai-score" class="text-3xl md:text-4xl font-bold text-light text-shadow score-update">0</p>
                     </div>
                 </div>
             </div>
 
             <!-- Game Area -->
-            <div class="glass-panel p-6 md:p-8 mb-8">
+            <div class="glass-panel p-6 md:p-8 rounded-3xl mb-8">
                 <!-- Your Choice -->
                 <div class="mb-8">
                     <p class="text-light text-shadow text-xs md:text-sm font-medium uppercase tracking-widest mb-4 opacity-70 text-center">Pilih Salah Satu</p>
@@ -84,7 +84,7 @@
                             </div>
                         </div>
 
-                        <button id="play-again-btn" class="btn-action mt-2 w-full py-3 bg-white bg-opacity-20 hover:bg-opacity-30 text-light text-shadow rounded-xl font-semibold transition-all border border-white border-opacity-30">
+                        <button id="play-again-btn" class="btn-action mt-4 px-8 py-3 bg-white bg-opacity-20 hover:bg-opacity-30 text-light text-shadow rounded-full font-semibold transition-all border border-white border-opacity-30">
                             Main Lagi
                         </button>
                     </div>
