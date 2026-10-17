@@ -1,9 +1,7 @@
-// Game state
 let playerScore = 0;
 let aiScore = 0;
 let gameActive = true;
 
-// Choice mappings
 const choices = {
     rock: { emoji: '✊', name: 'Batu' },
     paper: { emoji: '✋', name: 'Kertas' },
@@ -12,16 +10,31 @@ const choices = {
 
 const choicesArray = Object.keys(choices);
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    updateBackground();
     updateTime();
     setupEventListeners();
     
-    // Update time every minute
     setInterval(updateTime, 60000);
 });
 
-// Update time and greeting display
+function updateBackground() {
+    const now = new Date();
+    const hours = now.getHours();
+    const bgElement = document.querySelector('.sky-background');
+    if (!bgElement) return;
+    
+    let timeClass = 'night';
+    if (hours >= 5 && hours < 7) timeClass = 'early-morning';
+    else if (hours >= 7 && hours < 11) timeClass = 'morning';
+    else if (hours >= 11 && hours < 14) timeClass = 'noon';
+    else if (hours >= 14 && hours < 17) timeClass = 'afternoon';
+    else if (hours >= 17 && hours < 19) timeClass = 'evening';
+    else if (hours >= 19 && hours < 23) timeClass = 'dusk';
+    
+    bgElement.className = 'sky-background ' + timeClass;
+}
+
 function updateTime() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -31,17 +44,17 @@ function updateTime() {
     if (timeEl) timeEl.textContent = `${hours}:${minutes}`;
     
     const timeOfDay = now.getHours();
-    let greeting = '';
-    if (timeOfDay >= 5 && timeOfDay < 11) greeting = '🌅 Selamat Pagi';
-    else if (timeOfDay >= 11 && timeOfDay < 15) greeting = '☀️ Selamat Siang';
+    let greeting = '🌅 Selamat Pagi';
+    if (timeOfDay >= 11 && timeOfDay < 15) greeting = '☀️ Selamat Siang';
     else if (timeOfDay >= 15 && timeOfDay < 18) greeting = '🌤️ Selamat Sore';
-    else greeting = '🌙 Selamat Malam';
+    else if (timeOfDay >= 18 || timeOfDay < 5) greeting = '🌙 Selamat Malam';
     
     const greetingEl = document.getElementById('current-greeting');
     if (greetingEl) greetingEl.textContent = greeting;
+    
+    updateBackground();
 }
 
-// Setup event listeners
 function setupEventListeners() {
     document.querySelectorAll('.choice-btn').forEach(btn => {
         btn.addEventListener('click', () => handlePlayerChoice(btn.dataset.choice));
@@ -53,16 +66,12 @@ function setupEventListeners() {
     }
 }
 
-// Handle player choice
 function handlePlayerChoice(playerChoice) {
     if (!gameActive) return;
-    
     gameActive = false;
     
-    // Get AI choice
     const aiChoice = choicesArray[Math.floor(Math.random() * 3)];
     
-    // Highlight player choice
     document.querySelectorAll('.choice-btn').forEach(btn => {
         btn.classList.remove('selected');
         if (btn.dataset.choice === playerChoice) {
@@ -71,13 +80,11 @@ function handlePlayerChoice(playerChoice) {
         btn.disabled = true;
     });
     
-    // Fast response delay
     setTimeout(() => {
         displayResult(playerChoice, aiChoice);
-    }, 250);
+    }, 300);
 }
 
-// Determine winner
 function determineWinner(player, ai) {
     if (player === ai) return 'draw';
     if (
@@ -90,7 +97,6 @@ function determineWinner(player, ai) {
     return 'lose';
 }
 
-// Display result
 function displayResult(playerChoice, aiChoice) {
     const result = determineWinner(playerChoice, aiChoice);
     const statusEl = document.getElementById('game-status');
@@ -108,11 +114,9 @@ function displayResult(playerChoice, aiChoice) {
         statusEl.style.color = '#fbbf24';
     }
     
-    // Update score display
     document.getElementById('player-score').textContent = playerScore;
     document.getElementById('ai-score').textContent = aiScore;
     
-    // Show result choices
     document.getElementById('player-emoji').textContent = choices[playerChoice].emoji;
     document.getElementById('player-choice-name').textContent = choices[playerChoice].name;
     document.getElementById('ai-emoji').textContent = choices[aiChoice].emoji;
@@ -121,7 +125,6 @@ function displayResult(playerChoice, aiChoice) {
     document.getElementById('result-area').classList.remove('hidden');
 }
 
-// Reset round
 function resetRound() {
     gameActive = true;
     document.getElementById('result-area').classList.add('hidden');
@@ -131,5 +134,5 @@ function resetRound() {
     });
     const statusEl = document.getElementById('game-status');
     statusEl.textContent = 'Siap?';
-    statusEl.style.color = '#facc15';
+    statusEl.style.color = '';
 }
